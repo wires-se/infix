@@ -343,9 +343,9 @@
 				};
 			};
 
-			sw3p10: port@a {
-				reg = <0xa>;
-				link = <&sw2p10 &sw1p0>;
+			sw3p9: port@9 {
+				reg = <0x9>;
+				link = <&sw2p0 &sw1p0>;
 				phy-mode = "10gbase-r";
 				fixed-link {
 					speed = <10000>;
@@ -361,7 +361,7 @@
 			GSWP(6,  "e25", 25, sw3phy6);
 			GSWP(7,  "e28", 28, sw3phy7);
 			GSWP(8,  "e27", 27, sw3phy8);
-			XSWP(9, "e16", 16, sfp3);
+			XSWP(10, "e16", 16, sfp3);
 		};
 
 		mdio {
@@ -398,7 +398,7 @@
 
 			sw2p0: port@0 {
 				reg = <0x0>;
-				link = <&sw1p0>;
+				link = <&sw3p0>;
 				phy-mode = "10gbase-r";
 				fixed-link {
 					speed = <10000>;
@@ -408,7 +408,7 @@
 
 			sw2p10: port@a {
 				reg = <0xa>;
-				link = <&sw3p10>;
+				link = <&sw1p0>;
 				phy-mode = "10gbase-r";
 				fixed-link {
 					speed = <10000>;
@@ -462,7 +462,7 @@
 
 			sw1p0: port@0 {
 				reg = <0x0>;
-				link = <&sw2p0 &sw3p10>;
+				link = <&sw2p0 &sw3p9>;
 				phy-mode = "10gbase-r";
 				fixed-link {
 					speed = <10000>;
