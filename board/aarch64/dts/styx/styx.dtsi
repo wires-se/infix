@@ -332,8 +332,8 @@
 			#address-cells = <1>;
 			#size-cells = <0>;
 
-			port@9 {
-				reg = <0x9>;
+			port@0 {
+				reg = <0x0>;
 				label = "cpu";
 				ethernet = <&cp0_eth0>;
 				phy-mode = "10gbase-r";
@@ -353,23 +353,6 @@
 				};
 			};
 
-			/* Can't use XSWP macro as port 0 does not have
-			 * any LEDs attached to it. LEDs for port 10 seem
-			 * to be wired to the corresponding SFP cage. Maybe
-			 * we can apply a static workaround by binding port
-			 * 10's green LED to "Special LED 1", so we can at
-			 * least see link/act.
-			 */
-			port@0 {
-				reg = <0>;
-				label = "e16";
-				nvmem-cells = <&base_mac 16>;
-				nvmem-cell-names = "mac-address";
-				phy-mode = "10gbase-r";
-				managed = "in-band-status";
-				sfp = <&sfp3>;
-			};
-
 			GSWP(1,  "e22", 22, sw3phy1);
 			GSWP(2,  "e21", 21, sw3phy2);
 			GSWP(3,  "e24", 24, sw3phy3);
@@ -378,6 +361,7 @@
 			GSWP(6,  "e25", 25, sw3phy6);
 			GSWP(7,  "e28", 28, sw3phy7);
 			GSWP(8,  "e27", 27, sw3phy8);
+			XSWP(9, "e16", 16, sfp3);
 		};
 
 		mdio {
