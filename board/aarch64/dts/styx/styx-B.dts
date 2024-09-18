@@ -6,4 +6,4 @@
  * Device tree for Styx board
  */
 
-#include "styx-A.dts"
+#include "styx.dts"
