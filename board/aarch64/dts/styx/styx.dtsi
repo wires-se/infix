@@ -291,6 +291,29 @@
 		SWP_LED("sfp"); \
 	}
 
+#define XSWCPU(_n, _label, _eth) \
+	port@_n { \
+		reg = <0x ## _n>; \
+		label = _label; \
+		ethernet = <_eth>; \
+		phy-mode = "10gbase-r"; \
+		fixed-link { \
+			speed = <10000>; \
+			full-duplex; \
+		}; \
+	}
+
+#define XSWLINK(_n, _link) \
+	port@_n { \
+		reg = <0x ## _n>; \
+		link = <_link>; \
+		phy-mode = "10gbase-r"; \
+		fixed-link { \
+			speed = <10000>; \
+			full-duplex; \
+		}; \
+	}
+
 #define GSWP(_n, _label, _mac_offs, _phy) \
 	port@_n { \
 		reg = <0x ## _n>; \
@@ -332,27 +355,6 @@
 			#address-cells = <1>;
 			#size-cells = <0>;
 
-			port@0 {
-				reg = <0x0>;
-				label = "cpu";
-				ethernet = <&cp0_eth0>;
-				phy-mode = "10gbase-r";
-				fixed-link {
-					speed = <10000>;
-					full-duplex;
-				};
-			};
-
-			sw3p9: port@9 {
-				reg = <0x9>;
-				link = <&sw2p0 &sw1p0>;
-				phy-mode = "10gbase-r";
-				fixed-link {
-					speed = <10000>;
-					full-duplex;
-				};
-			};
-
 			GSWP(1,  "e22", 22, sw3phy1);
 			GSWP(2,  "e21", 21, sw3phy2);
 			GSWP(3,  "e24", 24, sw3phy3);
@@ -361,7 +363,6 @@
 			GSWP(6,  "e25", 25, sw3phy6);
 			GSWP(7,  "e28", 28, sw3phy7);
 			GSWP(8,  "e27", 27, sw3phy8);
-			XSWP(10, "e16", 16, sfp3);
 		};
 
 		mdio {
@@ -396,27 +397,6 @@
 			#address-cells = <1>;
 			#size-cells = <0>;
 
-			sw2p0: port@0 {
-				reg = <0x0>;
-				link = <&sw3p0>;
-				phy-mode = "10gbase-r";
-				fixed-link {
-					speed = <10000>;
-					full-duplex;
-				};
-			};
-
-			sw2p10: port@a {
-				reg = <0xa>;
-				link = <&sw1p0>;
-				phy-mode = "10gbase-r";
-				fixed-link {
-					speed = <10000>;
-					full-duplex;
-				};
-			};
-
-
 			GSWP(1, "e10", 10, sw2phy1);
 			GSWP(2,  "e9",  9, sw2phy2);
 			GSWP(3, "e12", 12, sw2phy3);
@@ -425,7 +405,6 @@
 			GSWP(6, "e17", 17, sw2phy6);
 			GSWP(7, "e20", 20, sw2phy7);
 			GSWP(8, "e19", 19, sw2phy8);
-			XSWP(9, "e15", 15, sfp2);
 		};
 
 		mdio {
@@ -460,16 +439,6 @@
 			#address-cells = <1>;
 			#size-cells = <0>;
 
-			sw1p0: port@0 {
-				reg = <0x0>;
-				link = <&sw2p0 &sw3p9>;
-				phy-mode = "10gbase-r";
-				fixed-link {
-					speed = <10000>;
-					full-duplex;
-				};
-			};
-
 			GSWP(1,  "e2",  2, sw1phy1);
 			GSWP(2,  "e1",  1, sw1phy2);
 			GSWP(3,  "e4",  4, sw1phy3);
@@ -478,8 +447,6 @@
 			GSWP(6,  "e5",  5, sw1phy6);
 			GSWP(7,  "e8",  8, sw1phy7);
 			GSWP(8,  "e7",  7, sw1phy8);
-			XSWP(9, "e14", 14, sfp1);
-			XSWP(a, "e13", 13, sfp0);
 		};
 
 		mdio {
