@@ -26,7 +26,7 @@
 &sw2 {
 	ports {
 		sw2p0:XSWLINK(0, &sw3p0);
-		sw2p10: XSWLINK(10, &sw1p0);
+		sw2p10: XSWLINK(a, &sw1p0);
 
 		XSWP(9, "e15", 15, sfp2);
 	};

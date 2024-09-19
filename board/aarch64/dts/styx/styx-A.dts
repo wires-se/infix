@@ -50,7 +50,7 @@
 		#size-cells = <0>;
 
 		sw2p0: XSWLINK(0, &sw1p0);
-		sw2p10: XSWLINK(10, &sw3p10);
+		sw2p10: XSWLINK(a, &sw3p10);
 
 		sw2p9: XSWP(9, "e15", 15, sfp2);
 	};
