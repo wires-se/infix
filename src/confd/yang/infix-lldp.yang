@@ -32,6 +32,14 @@ module infix-lldp {
     }
   }
 
+  deviation "/lldp:lldp/lldp:port/lldp:dest-mac-address" {
+      deviate add {
+          must ". = '01-80-C2-00-00-0E'" {
+              error-message "Only the LLDP Multicast MAC (01-80-C2-00-00-0E) is allowed.";
+          }
+      }
+  }
+
   deviation "/lldp:lldp/lldp:message-fast-tx" {
     deviate not-supported;
   }
