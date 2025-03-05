@@ -4,546 +4,459 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="https://src.libcode.org/pkun/klish/src/master/klish.xsd">
 
-<PLUGIN name="klish"/>
-<PLUGIN name="infix"/>
-<PLUGIN name="script"/>
-<PLUGIN name="sysrepo">
-  ShowBrackets = y
-  ShowSemicolons = y
-  KeysWithStatement = y
-  FirstKeyWithStatement = n
-  Colorize = y
-  Indent = 2
-  DefaultKeys = y
-  ShowDefaultKeys = y
-  HidePasswords = n
-  EnableNACM = y
-  Oneliners = n
-</PLUGIN>
+  <PLUGIN name="klish"/>
+  <PLUGIN name="infix"/>
+  <PLUGIN name="script"/>
+  <PLUGIN name="sysrepo">
+    ShowBrackets = y
+    ShowSemicolons = y
+    KeysWithStatement = y
+    FirstKeyWithStatement = n
+    Colorize = y
+    Indent = 2
+    DefaultKeys = y
+    ShowDefaultKeys = y
+    HidePasswords = n
+    EnableNACM = y
+    Oneliners = n
+  </PLUGIN>
 
-<PTYPE name="CFG">
-  <COMPL>
-    <ACTION sym="datastore@infix">cfg</ACTION>
-  </COMPL>
-  <ACTION sym="STRING"/>
-</PTYPE>
-
-<PTYPE name="DATASTORE">
-  <COMPL>
-    <ACTION sym="datastore@infix">src</ACTION>
-  </COMPL>
-  <ACTION sym="STRING"/>
-</PTYPE>
-
-<PTYPE name="RW_DATASTORE">
-  <COMPL>
-    <ACTION sym="datastore@infix">dst</ACTION>
-  </COMPL>
-  <ACTION sym="STRING"/>
-</PTYPE>
-
-<PTYPE name="PLINE_SET">
-  <COMPL>
-    <ACTION sym="srp_compl@sysrepo"/>
-  </COMPL>
-  <HELP>
-    <ACTION sym="srp_help@sysrepo"/>
-  </HELP>
-  <ACTION sym="PLINE_SET@sysrepo"/>
-</PTYPE>
-
-<PTYPE name="PLINE_DEL">
-  <COMPL>
-    <ACTION sym="srp_compl@sysrepo"/>
-  </COMPL>
-  <HELP>
-    <ACTION sym="srp_help@sysrepo"/>
-  </HELP>
-  <ACTION sym="PLINE_DEL@sysrepo"/>
-</PTYPE>
-
-<PTYPE name="PLINE_EDIT">
-  <COMPL>
-    <ACTION sym="srp_compl@sysrepo"/>
-  </COMPL>
-  <HELP>
-    <ACTION sym="srp_help@sysrepo"/>
-  </HELP>
-  <ACTION sym="PLINE_EDIT@sysrepo"/>
-</PTYPE>
-
-<PTYPE name="PLINE_INSERT_FROM">
-  <COMPL>
-    <ACTION sym="srp_compl@sysrepo"/>
-  </COMPL>
-  <HELP>
-    <ACTION sym="srp_help@sysrepo"/>
-  </HELP>
-  <ACTION sym="PLINE_INSERT_FROM@sysrepo"/>
-</PTYPE>
-
-<PTYPE name="PLINE_INSERT_TO">
-  <COMPL>
-    <ACTION sym="srp_compl_insert_to@sysrepo"/>
-  </COMPL>
-  <HELP>
-    <ACTION sym="srp_help_insert_to@sysrepo"/>
-  </HELP>
-  <ACTION sym="PLINE_INSERT_TO@sysrepo"/>
-</PTYPE>
-
-<PTYPE name="LOGFILES">
-  <COMPL>
-    <ACTION sym="files@infix">/var/log</ACTION>
-  </COMPL>
-  <ACTION sym="STRING"/>
-</PTYPE>
-
-<PTYPE name="FILES">
-  <COMPL>
-    <ACTION sym="files@infix">/cfg</ACTION>
-  </COMPL>
-  <ACTION sym="STRING"/>
-</PTYPE>
-
-<PTYPE name="IFACES">
-  <COMPL>
-    <ACTION sym="ifaces@infix"/>
-  </COMPL>
-  <ACTION sym="STRING"/>
-</PTYPE>
-
-<VIEW name="main">
-  <HOTKEY key="^D" cmd="exit"/>
-
-  <PROMPT>
-    <ACTION sym="prompt" exec_on="always">%u@%h:/> </ACTION>
-</PROMPT>
-
-<COMMAND name="help" help="Help system (try also the '?' key)">
-  <PARAM name="topic" ptype="/STRING" min="0" help="Help topic">
+  <PTYPE name="CFG">
     <COMPL>
-      <ACTION sym="printl">configure</ACTION>
-      <ACTION sym="printl">introduction</ACTION>
-      <ACTION sym="printl">keybindings</ACTION>
-      <ACTION sym="printl">netcalc</ACTION>
-      <ACTION sym="printl">quick</ACTION>
-      <ACTION sym="printl">tcpdump</ACTION>
-      <ACTION sym="printl">text-editor</ACTION>
-      <ACTION sym="printl">upgrade</ACTION>
+      <ACTION sym="datastore@infix">cfg</ACTION>
     </COMPL>
-  </PARAM>
-  <ACTION sym="script" in="tty" out="tty" interrupt="true">
-    topic=${KLISH_PARAM_topic:-quick}
-    fn="/usr/share/infix/cli/${topic}.md"
-    if [ -f "$fn" ]; then
-      lowdown -t term --term-vmargin=1 "$fn" |pager
-    else
-      echo "Help topic not available, try help without an argument, or tap '?' for a list."
-    fi
-  </ACTION>
-</COMMAND>
+    <ACTION sym="STRING"/>
+  </PTYPE>
 
-<COMMAND name="poweroff" help="Poweroff system (system policy may yield reboot)">
-  <ACTION sym="srp_rpc@sysrepo" ptype="STRING">/ietf-system:system-shutdown</ACTION>
-</COMMAND>
+  <PTYPE name="DATASTORE">
+    <COMPL>
+      <ACTION sym="datastore@infix">src</ACTION>
+    </COMPL>
+    <ACTION sym="STRING"/>
+  </PTYPE>
 
-<COMMAND name="reboot" help="Reboot system">
-  <ACTION sym="srp_rpc@sysrepo" ptype="STRING">/ietf-system:system-restart</ACTION>
-</COMMAND>
+  <PTYPE name="RW_DATASTORE">
+    <COMPL>
+      <ACTION sym="datastore@infix">dst</ACTION>
+    </COMPL>
+    <ACTION sym="STRING"/>
+  </PTYPE>
 
-<COMMAND name="exit" help="Exit from CLI (log out)">
-  <ACTION sym="nav">pop</ACTION>
-</COMMAND>
-<COMMAND name="logout" help="Alias to exit">
-  <ACTION sym="nav">pop</ACTION>
-</COMMAND>
+  <PTYPE name="PLINE_SET">
+    <COMPL>
+      <ACTION sym="srp_compl@sysrepo"/>
+    </COMPL>
+    <HELP>
+      <ACTION sym="srp_help@sysrepo"/>
+    </HELP>
+    <ACTION sym="PLINE_SET@sysrepo"/>
+  </PTYPE>
 
-<COMMAND name="configure" help="Create new candidate-config based on running-config">
-  <ACTION sym="nav">replace config</ACTION>
-</COMMAND>
+  <PTYPE name="PLINE_DEL">
+    <COMPL>
+      <ACTION sym="srp_compl@sysrepo"/>
+    </COMPL>
+    <HELP>
+      <ACTION sym="srp_help@sysrepo"/>
+    </HELP>
+    <ACTION sym="PLINE_DEL@sysrepo"/>
+  </PTYPE>
 
-<COMMAND name="copy" help="Copy file or configuration, e.g., copy running-config startup-config">
-  <PARAM name="src" ptype="/DATASTORE"    help="Source datastore or file, e.g., tftp://ip/file"/>
-  <PARAM name="dst" ptype="/RW_DATASTORE" help="Destination datastore or file, e.g., scp://ip/file"/>
-  <SWITCH name="optional" min="0">
-    <PARAM name="user" ptype="/STRING"    help="Remote username (interactive password)"/>
-  </SWITCH>
-  <ACTION sym="copy@infix" in="tty" out="tty" interrupt="true"/>
-</COMMAND>
+  <PTYPE name="PLINE_EDIT">
+    <COMPL>
+      <ACTION sym="srp_compl@sysrepo"/>
+    </COMPL>
+    <HELP>
+      <ACTION sym="srp_help@sysrepo"/>
+    </HELP>
+    <ACTION sym="PLINE_EDIT@sysrepo"/>
+  </PTYPE>
 
-<COMMAND name="dir" help="List available files">
-  <SWITCH name="optional" min="0">
-    <PARAM name="path" ptype="/STRING" help="Directory contents to list"/>
-  </SWITCH>
-  <ACTION sym="script" in="tty" out="tty" interrupt="true">
-    dir $KLISH_PARAM_path
-  </ACTION>
-</COMMAND>
+  <PTYPE name="PLINE_INSERT_FROM">
+    <COMPL>
+      <ACTION sym="srp_compl@sysrepo"/>
+    </COMPL>
+    <HELP>
+      <ACTION sym="srp_help@sysrepo"/>
+    </HELP>
+    <ACTION sym="PLINE_INSERT_FROM@sysrepo"/>
+  </PTYPE>
 
-<COMMAND name="remove" help="Remove a configuration file">
-  <PARAM name="file" ptype="/FILES" help="Configuration file"/>
-  <ACTION sym="erase@infix" in="tty" out="tty" interrupt="true"/>
-</COMMAND>
+  <PTYPE name="PLINE_INSERT_TO">
+    <COMPL>
+      <ACTION sym="srp_compl_insert_to@sysrepo"/>
+    </COMPL>
+    <HELP>
+      <ACTION sym="srp_help_insert_to@sysrepo"/>
+    </HELP>
+    <ACTION sym="PLINE_INSERT_TO@sysrepo"/>
+  </PTYPE>
 
-<COMMAND name="password" help="Password tools" mode="switch">
-  <COMMAND name="generate" help="Generate random passwords using pwgen">
-    <ACTION sym="script">pwgen -C -s 13 20</ACTION>
-  </COMMAND>
+  <PTYPE name="LOGFILES">
+    <COMPL>
+      <ACTION sym="files@infix">/var/log</ACTION>
+    </COMPL>
+    <ACTION sym="STRING"/>
+  </PTYPE>
 
-  <COMMAND name="encrypt" help="Encrypt a password string">
-    <SWITCH name="optional" min="0" max="4">
-      <COMMAND name="salt" help="Random data to salt with before hashing.">
-        <PARAM name="pwsalt" ptype="/STRING" help="Must not use prefix like $1$"/>
+  <PTYPE name="FILES">
+    <COMPL>
+      <ACTION sym="files@infix">/cfg</ACTION>
+    </COMPL>
+    <ACTION sym="STRING"/>
+  </PTYPE>
+
+  <PTYPE name="IFACES">
+    <COMPL>
+      <ACTION sym="ifaces@infix"/>
+    </COMPL>
+    <ACTION sym="STRING"/>
+  </PTYPE>
+
+  <VIEW name="main">
+    <HOTKEY key="^D" cmd="exit"/>
+
+    <PROMPT>
+      <ACTION sym="prompt" exec_on="always">%u@%h:/> </ACTION>
+    </PROMPT>
+
+    <COMMAND name="help" help="Help system (try also the '?' key)">
+      <PARAM name="topic" ptype="/STRING" min="0" help="Help topic">
+        <COMPL>
+          <ACTION sym="printl">configure</ACTION>
+          <ACTION sym="printl">introduction</ACTION>
+          <ACTION sym="printl">keybindings</ACTION>
+          <ACTION sym="printl">netcalc</ACTION>
+          <ACTION sym="printl">quick</ACTION>
+          <ACTION sym="printl">tcpdump</ACTION>
+          <ACTION sym="printl">text-editor</ACTION>
+          <ACTION sym="printl">upgrade</ACTION>
+        </COMPL>
+      </PARAM>
+      <ACTION sym="script" in="tty" out="tty" interrupt="true">
+        topic=${KLISH_PARAM_topic:-quick}
+        fn="/usr/share/infix/cli/${topic}.md"
+        if [ -f "$fn" ]; then
+          lowdown -t term --term-vmargin=1 "$fn" |pager
+        else
+          echo "Help topic not available, try help without an argument, or tap '?' for a list."
+        fi
+      </ACTION>
+    </COMMAND>
+
+    <COMMAND name="poweroff" help="Poweroff system (system policy may yield reboot)">
+      <ACTION sym="srp_rpc@sysrepo" ptype="STRING">/ietf-system:system-shutdown</ACTION>
+    </COMMAND>
+
+    <COMMAND name="reboot" help="Reboot system">
+      <ACTION sym="srp_rpc@sysrepo" ptype="STRING">/ietf-system:system-restart</ACTION>
+    </COMMAND>
+
+    <COMMAND name="exit" help="Exit from CLI (log out)">
+      <ACTION sym="nav">pop</ACTION>
+    </COMMAND>
+    
+    <COMMAND name="logout" help="Alias to exit">
+      <ACTION sym="nav">pop</ACTION>
+    </COMMAND>
+
+    <COMMAND name="configure" help="Create new candidate-config based on running-config">
+      <ACTION sym="nav">replace config</ACTION>
+    </COMMAND>
+
+    <COMMAND name="copy" help="Copy file or configuration, e.g., copy running-config startup-config">
+      <PARAM name="src" ptype="/DATASTORE"    help="Source datastore or file, e.g., tftp://ip/file"/>
+      <PARAM name="dst" ptype="/RW_DATASTORE" help="Destination datastore or file, e.g., scp://ip/file"/>
+      <SWITCH name="optional" min="0">
+        <PARAM name="user" ptype="/STRING"    help="Remote username (interactive password)"/>
+      </SWITCH>
+      <ACTION sym="copy@infix" in="tty" out="tty" interrupt="true"/>
+    </COMMAND>
+
+    <COMMAND name="dir" help="List available files">
+      <SWITCH name="optional" min="0">
+        <PARAM name="path" ptype="/STRING" help="Directory contents to list"/>
+      </SWITCH>
+      <ACTION sym="script" in="tty" out="tty" interrupt="true">
+        dir $KLISH_PARAM_path
+      </ACTION>
+    </COMMAND>
+
+    <COMMAND name="remove" help="Remove a configuration file">
+      <PARAM name="file" ptype="/FILES" help="Configuration file"/>
+      <ACTION sym="erase@infix" in="tty" out="tty" interrupt="true"/>
+    </COMMAND>
+
+    <COMMAND name="password" help="Password tools" mode="switch">
+      <COMMAND name="generate" help="Generate random passwords using pwgen">
+        <ACTION sym="script">pwgen -C -s 13 20</ACTION>
       </COMMAND>
-      <COMMAND name="type" help="Optional hash algorithm type.">
-        <PARAM name="pwhash" ptype="/STRING" help="Hash crypt algorithm.">
-          <COMPL>
-            <ACTION sym="printl">md5crypt</ACTION>
-            <ACTION sym="printl">sha256crypt</ACTION>
-            <ACTION sym="printl">sha512crypt</ACTION>
-            <ACTION sym="printl">yescrypt</ACTION>
-          </COMPL>
-        </PARAM>
-      </COMMAND>
-      <PARAM name="pwpass" ptype="/STRING" help="Optional clear text password (no spaces)"/>
-    </SWITCH>
-    <ACTION sym="script" in="tty" out="tty" interrupt="true">
-      type=${KLISH_PARAM_pwhash:-sha512}
-      salt=${KLISH_PARAM_pwsalt:+-S $KLISH_PARAM_pwsalt}
-      mkpasswd -m $type $salt $KLISH_PARAM_pwpass
-    </ACTION>
-  </COMMAND>
-</COMMAND>
 
-<COMMAND name="set" help="Set operations, e.g., current date/time" mode="switch">
-  <COMMAND name="datetime" help="Set current date and time, ISO-8601 format">
-    <PARAM name="current-datetime" ptype="/STRING" help="yyyy-mm-ddThh:mm:ss(Z|+/-hh:mm)"/>
-    <ACTION sym="srp_rpc@sysrepo">/ietf-system:set-current-datetime</ACTION>
-  </COMMAND>
-</COMMAND>
-
-<COMMAND name="dhcp-server" help="DHCP server tools" mode="switch">
-  <COMMAND name="clear-statistics" help="Clear DHCP server statistics">
-    <ACTION sym="srp_rpc@sysrepo">/infix-dhcp-server:dhcp-server/statistics/clear</ACTION>
-  </COMMAND>
-</COMMAND>
-
-<COMMAND name="show" help="Show system status and configuration files" mode="switch">
-
-  <COMMAND name="bridge" help="Show bridge (ports/fdb/mdb/vlans)">
-    <ACTION sym="script" in="tty" out="tty" interrupt="true">
-      bridge -color link |pager
-    </ACTION>
-
-    <SWITCH name="optional" min="0">
-      <COMMAND name="fdb" help="Show unicast forwarding database">
+      <COMMAND name="encrypt" help="Encrypt a password string">
+        <SWITCH name="optional" min="0" max="4">
+          <COMMAND name="salt" help="Random data to salt with before hashing.">
+            <PARAM name="pwsalt" ptype="/STRING" help="Must not use prefix like $1$"/>
+          </COMMAND>
+          <COMMAND name="type" help="Optional hash algorithm type.">
+            <PARAM name="pwhash" ptype="/STRING" help="Hash crypt algorithm.">
+              <COMPL>
+                <ACTION sym="printl">md5crypt</ACTION>
+                <ACTION sym="printl">sha256crypt</ACTION>
+                <ACTION sym="printl">sha512crypt</ACTION>
+                <ACTION sym="printl">yescrypt</ACTION>
+              </COMPL>
+            </PARAM>
+          </COMMAND>
+          <PARAM name="pwpass" ptype="/STRING" help="Optional clear text password (no spaces)"/>
+        </SWITCH>
         <ACTION sym="script" in="tty" out="tty" interrupt="true">
-	  bridge -color fdb |pager
-	</ACTION>
+          type=${KLISH_PARAM_pwhash:-sha512}
+          salt=${KLISH_PARAM_pwsalt:+-S $KLISH_PARAM_pwsalt}
+          mkpasswd -m $type $salt $KLISH_PARAM_pwpass
+        </ACTION>
       </COMMAND>
-      <COMMAND name="mdb" help="Show mulficast forwarding database">
-	<SWITCH name="optional" min="0">
-	  <COMMAND name="detailed" help="Detailed (full) output">
-            <ACTION sym="script" in="tty" out="tty" interrupt="true">
-	      bridge -color -d mdb |pager
-	    </ACTION>
-	  </COMMAND>
-	</SWITCH>
+    </COMMAND>
+
+    <COMMAND name="set" help="Set operations, e.g., current date/time" mode="switch">
+      <COMMAND name="datetime" help="Set current date and time, ISO-8601 format">
+        <PARAM name="current-datetime" ptype="/STRING" help="yyyy-mm-ddThh:mm:ss(Z|+/-hh:mm)"/>
+        <ACTION sym="srp_rpc@sysrepo">/ietf-system:set-current-datetime</ACTION>
+      </COMMAND>
+    </COMMAND>
+
+    <COMMAND name="dhcp-server" help="DHCP server tools" mode="switch">
+      <COMMAND name="clear-statistics" help="Clear DHCP server statistics">
+        <ACTION sym="srp_rpc@sysrepo">/infix-dhcp-server:dhcp-server/statistics/clear</ACTION>
+      </COMMAND>
+    </COMMAND>
+
+    <COMMAND name="show" help="Show system status and configuration files" mode="switch">
+
+      <COMMAND name="bridge" help="Show bridge (ports/fdb/mdb/vlans)">
         <ACTION sym="script" in="tty" out="tty" interrupt="true">
-	  sysrepocfg -d operational -X -f json -x /ietf-interfaces:interfaces | \
-	    /usr/libexec/statd/cli-pretty show-bridge-mdb |pager
-	</ACTION>
-      </COMMAND>
-      <COMMAND name="stp" help="Show spanning tree status">
-        <ACTION sym="script" in="tty" out="tty" interrupt="true">
-	  sysrepocfg -d operational -X -f json -x /ietf-interfaces:interfaces | \
-	    /usr/libexec/statd/cli-pretty show-bridge-stp |pager
-	</ACTION>
-      </COMMAND>
-      <COMMAND name="vlan" help="Show VLAN table">
-        <ACTION sym="script">bridge -color vlan</ACTION>
+          bridge -color link |pager
+        </ACTION>
+
         <SWITCH name="optional" min="0">
-          <COMMAND name="detailed" help="Detailed (full) output">
+          <COMMAND name="fdb" help="Show unicast forwarding database">
             <ACTION sym="script" in="tty" out="tty" interrupt="true">
-	      bridge -color -d vlan |pager
-	    </ACTION>
+              bridge -color fdb |pager
+            </ACTION>
+          </COMMAND>
+          <COMMAND name="mdb" help="Show mulficast forwarding database">
+            <SWITCH name="optional" min="0">
+              <COMMAND name="detailed" help="Detailed (full) output">
+                <ACTION sym="script" in="tty" out="tty" interrupt="true">
+                  bridge -color -d mdb |pager
+                </ACTION>
+              </COMMAND>
+            </SWITCH>
+            <ACTION sym="script" in="tty" out="tty" interrupt="true">
+              sysrepocfg -d operational -X -f json -x /ietf-interfaces:interfaces | \
+              /usr/libexec/statd/cli-pretty show-bridge-mdb |pager
+            </ACTION>
+          </COMMAND>
+          <COMMAND name="stp" help="Show spanning tree status">
+            <ACTION sym="script" in="tty" out="tty" interrupt="true">
+              sysrepocfg -d operational -X -f json -x /ietf-interfaces:interfaces | \
+              /usr/libexec/statd/cli-pretty show-bridge-stp |pager
+            </ACTION>
+          </COMMAND>
+          <COMMAND name="vlan" help="Show VLAN table">
+            <ACTION sym="script">bridge -color vlan</ACTION>
+            <SWITCH name="optional" min="0">
+              <COMMAND name="detailed" help="Detailed (full) output">
+                <ACTION sym="script" in="tty" out="tty" interrupt="true">
+                  bridge -color -d vlan |pager
+                </ACTION>
+              </COMMAND>
+            </SWITCH>
           </COMMAND>
         </SWITCH>
       </COMMAND>
-    </SWITCH>
-  </COMMAND>
 
-  <COMMAND name="datetime" help="Show current date and time, default RFC2822 format">
-    <ACTION sym="script">date -R</ACTION>
-    <SWITCH name="optional" min="0">
-      <COMMAND name="iso" min="0" help="NETCONF/ISO-8601 format">
-        <ACTION sym="script">date -Isec</ACTION>
-      </COMMAND>
-    </SWITCH>
-  </COMMAND>
-
-  <COMMAND name="dns" help="Show DNS (client) status">
-    <!-- Show static/configured nameservers and then all learned ones from DHCP clients -->
-    <ACTION sym="script" in="tty" out="tty" interrupt="true">
-      cat /etc/resolv.conf.head 2>/dev/null; resolvconf -l | sed 's/#.*//; /^\s*$/d' |pager
-    </ACTION>
-  </COMMAND>
-
-  <COMMAND name="ntp" help="Show NTP (client) status">
-    <ACTION sym="script">
-      sysrepocfg -d operational -X -f json -x /system-state/ntp  | \
-         /usr/libexec/statd/cli-pretty "show-ntp"
-    </ACTION>
-    <SWITCH name="optional" min="0">
-      <COMMAND name="tracking" help="Show NTP tracking">
-        <ACTION sym="script">doas ntp tracking</ACTION>
-      </COMMAND>
-    </SWITCH>
-  </COMMAND>
-
-  <COMMAND name="dhcp-server" help="Show DHCP server status">
-    <ACTION sym="script" in="tty" out="tty" interrupt="true">show dhcp</ACTION>
-
-    <SWITCH name="optional" min="0">
-      <COMMAND name="statistics" help="Show DHCP server statistics">
-	<ACTION sym="script" in="tty" out="tty" interrupt="true">show dhcp stat</ACTION>
+      <COMMAND name="datetime" help="Show current date and time, default RFC2822 format">
+        <ACTION sym="script">date -R</ACTION>
+        <SWITCH name="optional" min="0">
+          <COMMAND name="iso" min="0" help="NETCONF/ISO-8601 format">
+            <ACTION sym="script">date -Isec</ACTION>
+          </COMMAND>
+        </SWITCH>
       </COMMAND>
 
-      <COMMAND name="detailed" help="Detailed (full operational) output">
-	<ACTION sym="script" in="tty" out="tty" interrupt="true">show dhcp detail</ACTION>
+      <COMMAND name="dns" help="Show DNS (client) status">
+        <!-- Show static/configured nameservers and then all learned ones from DHCP clients -->
+        <ACTION sym="script" in="tty" out="tty" interrupt="true">
+          cat /etc/resolv.conf.head 2>/dev/null; resolvconf -l | sed 's/#.*//; /^\s*$/d' |pager
+        </ACTION>
       </COMMAND>
 
-    </SWITCH>
-  </COMMAND>
+      <COMMAND name="ntp" help="Show NTP (client) status">
+        <ACTION sym="script">
+          sysrepocfg -d operational -X -f json -x /system-state/ntp  | \
+            /usr/libexec/statd/cli-pretty "show-ntp"
+        </ACTION>
+        <SWITCH name="optional" min="0">
+          <COMMAND name="tracking" help="Show NTP tracking">
+            <ACTION sym="script">doas ntp tracking</ACTION>
+          </COMMAND>
+        </SWITCH>
+      </COMMAND>
 
-  <COMMAND name="software" help="Show software info">
-    <SWITCH name="optional" min="0" max="1">
-      <COMMAND name="name" help="Show detailed info about a partition">
-        <PARAM name="name" ptype="/STRING" help="Partition name">
+      <COMMAND name="dhcp-server" help="Show DHCP server status">
+        <ACTION sym="script" in="tty" out="tty" interrupt="true">show dhcp</ACTION>
+
+        <SWITCH name="optional" min="0">
+          <COMMAND name="statistics" help="Show DHCP server statistics">
+            <ACTION sym="script" in="tty" out="tty" interrupt="true">show dhcp stat</ACTION>
+          </COMMAND>
+
+          <COMMAND name="detailed" help="Detailed (full operational) output">
+            <ACTION sym="script" in="tty" out="tty" interrupt="true">show dhcp detail</ACTION>
+          </COMMAND>
+
+        </SWITCH>
+      </COMMAND>
+
+      <COMMAND name="software" help="Show software info">
+        <SWITCH name="optional" min="0" max="1">
+          <COMMAND name="name" help="Show detailed info about a partition">
+            <PARAM name="name" ptype="/STRING" help="Partition name">
+            </PARAM>
+          </COMMAND>
+        </SWITCH>
+        <ACTION sym="script">
+          tmp=$(mktemp)
+          sysrepocfg -d operational -X -f json -x /ietf-system:system-state/infix-system:software | \
+                  jq -r '.[][].slot |= sort_by(.name)' > "$tmp"
+          if [ -n "$KLISH_PARAM_name" ]; then
+              cat "$tmp" | /usr/libexec/statd/cli-pretty "show-software" -n "$KLISH_PARAM_name"
+          else
+              cat "$tmp" | /usr/libexec/statd/cli-pretty "show-software"
+          fi
+          rm "$tmp"
+        </ACTION>
+      </COMMAND>
+
+      <COMMAND name="ospf" help="Show OSPF status">
+        <PARAM name="name" ptype="/STRING" help="neighbor, interfaces or bfd" min="0" max="1">
+          <COMPL>
+            <ACTION sym="printl">neighbor</ACTION>
+            <ACTION sym="printl">interfaces</ACTION>
+            <ACTION sym="printl">routes</ACTION>
+            <ACTION sym="printl">database</ACTION>
+            <ACTION sym="printl">bfd</ACTION>
+          </COMPL>
         </PARAM>
+        <ACTION sym="script" in="tty" out="tty" interrupt="true">
+          if [ -z "$KLISH_PARAM_name" ]; then
+            doas vtysh -c "show ip ospf" |pager
+          elif [ "$KLISH_PARAM_name" == "neighbor" ];then
+            doas vtysh -c "show ip ospf neighbor" |pager
+          elif [ "$KLISH_PARAM_name" == "interfaces" ];then
+            doas vtysh -c "show ip ospf interface" |pager
+          elif [ "$KLISH_PARAM_name" == "routes" ];then
+            doas vtysh -c "show ip ospf route" |pager
+          elif [ "$KLISH_PARAM_name" == "database" ];then
+            doas vtysh -c "show ip ospf database" |pager
+          elif [ "$KLISH_PARAM_name" == "bfd" ];then
+            doas vtysh -c "show bfd peers" |pager
+          fi
+        </ACTION>
       </COMMAND>
-    </SWITCH>
-    <ACTION sym="script">
-      tmp=$(mktemp)
-      sysrepocfg -d operational -X -f json -x /ietf-system:system-state/infix-system:software | \
-              jq -r '.[][].slot |= sort_by(.name)' > "$tmp"
-      if [ -n "$KLISH_PARAM_name" ]; then
-          cat "$tmp" | /usr/libexec/statd/cli-pretty "show-software" -n "$KLISH_PARAM_name"
-      else
-          cat "$tmp" | /usr/libexec/statd/cli-pretty "show-software"
-      fi
-      rm "$tmp"
-    </ACTION>
-  </COMMAND>
 
-  <COMMAND name="ospf" help="Show OSPF status">
-    <PARAM name="name" ptype="/STRING" help="neighbor, interfaces or bfd" min="0" max="1">
-      <COMPL>
-	<ACTION sym="printl">neighbor</ACTION>
-	<ACTION sym="printl">interfaces</ACTION>
-	<ACTION sym="printl">routes</ACTION>
-	<ACTION sym="printl">database</ACTION>
-	<ACTION sym="printl">bfd</ACTION>
-      </COMPL>
-    </PARAM>
-    <ACTION sym="script" in="tty" out="tty" interrupt="true">
-    if [ -z "$KLISH_PARAM_name" ]; then
-       doas vtysh -c "show ip ospf" |pager
-    elif [ "$KLISH_PARAM_name" == "neighbor" ];then
-       doas vtysh -c "show ip ospf neighbor" |pager
-    elif [ "$KLISH_PARAM_name" == "interfaces" ];then
-       doas vtysh -c "show ip ospf interface" |pager
-    elif [ "$KLISH_PARAM_name" == "routes" ];then
-       doas vtysh -c "show ip ospf route" |pager
-    elif [ "$KLISH_PARAM_name" == "database" ];then
-       doas vtysh -c "show ip ospf database" |pager
-    elif [ "$KLISH_PARAM_name" == "bfd" ];then
-       doas vtysh -c "show bfd peers" |pager
-    fi
-    </ACTION>
-  </COMMAND>
-
-  <COMMAND name="routes" help="Show routing table">
-    <PARAM name="ip" ptype="/STRING" help="ipv4 or ipv6" min="0" max="1">
-	<COMPL>
-	  <ACTION sym="printl">ipv4</ACTION>
-	  <ACTION sym="printl">ipv6</ACTION>
-	</COMPL>
-    </PARAM>
-    <ACTION sym="script" in="tty" out="tty" interrupt="true">
-      case $KLISH_PARAM_ip in
-        ipv4)
-          KLISH_PARAM_ip=ip
-          ;;
-        ipv6)
-          KLISH_PARAM_ip=ipv6
-          ;;
-      esac
-      show -p $KLISH_PARAM_ip route |pager
-    </ACTION>
-  </COMMAND>
-
-  <COMMAND name="hardware" help="Show hardware information">
-    <ACTION sym="script" in="tty" out="tty" interrupt="true">
-      sysrepocfg -f json -X -d operational -x "/ietf-hardware:hardware" | \
-      /usr/libexec/statd/cli-pretty "show-hardware" |pager
-    </ACTION>
-  </COMMAND>
-
-  <!-- https://www.cisco.com/c/en/us/td/docs/wireless/access_point/mob_exp/83/cmd-ref/me_cr_book/me_ports_and_interfaces_cli.html -->
-  <COMMAND name="interfaces" help="Show interface info">
-    <SWITCH name="optional" min="0" max="1">
-      <COMMAND name="name" help="Show detailed info about NAME">
-        <PARAM name="name" ptype="/IFACES" help="Interface.">
+      <COMMAND name="routes" help="Show routing table">
+        <PARAM name="ip" ptype="/STRING" help="ipv4 or ipv6" min="0" max="1">
+          <COMPL>
+            <ACTION sym="printl">ipv4</ACTION>
+            <ACTION sym="printl">ipv6</ACTION>
+          </COMPL>
         </PARAM>
-      </COMMAND>
-    </SWITCH>
-    <ACTION sym="script" in="tty" out="tty" interrupt="true">
-      if [ -n "$KLISH_PARAM_name" ]; then
-        doas sysrepocfg -f json -X -d operational -x \
-          "/ietf-interfaces:interfaces/interface[name=\"$KLISH_PARAM_name\"]" | \
-          /usr/libexec/statd/cli-pretty "show-interfaces" -n "$KLISH_PARAM_name" |pager
-      else
-        doas sysrepocfg -f json -X -d operational -m ietf-interfaces | \
-          /usr/libexec/statd/cli-pretty "show-interfaces" |pager
-      fi
-    </ACTION>
-  </COMMAND>
-
-  <COMMAND name="ip" help="Show IP level status (Layer-3)">
-    <ACTION sym="script" in="tty" out="tty" interrupt="true">
-      ip -color addr |pager
-    </ACTION>
-
-    <SWITCH name="optional" min="0">
-      <COMMAND name="brief" help="Simplified (human-readable) output" mode="switch">
         <ACTION sym="script" in="tty" out="tty" interrupt="true">
-	  ip -color -br addr | sort -V | sed 's/@dsa[0-9]/     /' |pager
-	</ACTION>
+          case $KLISH_PARAM_ip in
+            ipv4)
+              KLISH_PARAM_ip=ip
+              ;;
+            ipv6)
+              KLISH_PARAM_ip=ipv6
+              ;;
+          esac
+          show -p $KLISH_PARAM_ip route |pager
+        </ACTION>
       </COMMAND>
 
-      <COMMAND name="detailed" help="Detailed (full) output" mode="switch">
+      <COMMAND name="hardware" help="Show hardware information">
         <ACTION sym="script" in="tty" out="tty" interrupt="true">
-	  ip -color -d addr |pager
-	</ACTION>
+          sysrepocfg -f json -X -d operational -x "/ietf-hardware:hardware" | \
+          /usr/libexec/statd/cli-pretty "show-hardware" |pager
+        </ACTION>
       </COMMAND>
 
-      <COMMAND name="multicast" help="Show IGMP/MLD status" mode="switch">
+      <!-- https://www.cisco.com/c/en/us/td/docs/wireless/access_point/mob_exp/83/cmd-ref/me_cr_book/me_ports_and_interfaces_cli.html -->
+      <COMMAND name="interfaces" help="Show interface info">
+        <SWITCH name="optional" min="0" max="1">
+          <COMMAND name="name" help="Show detailed info about NAME">
+            <PARAM name="name" ptype="/IFACES" help="Interface.">
+            </PARAM>
+          </COMMAND>
+        </SWITCH>
         <ACTION sym="script" in="tty" out="tty" interrupt="true">
-	  mctl |pager
-	</ACTION>
+          if [ -n "$KLISH_PARAM_name" ]; then
+            doas sysrepocfg -f json -X -d operational -x \
+              "/ietf-interfaces:interfaces/interface[name=\"$KLISH_PARAM_name\"]" | \
+              /usr/libexec/statd/cli-pretty "show-interfaces" -n "$KLISH_PARAM_name" |pager
+          else
+            doas sysrepocfg -f json -X -d operational -m ietf-interfaces | \
+              /usr/libexec/statd/cli-pretty "show-interfaces" |pager
+          fi
+        </ACTION>
       </COMMAND>
 
-      <COMMAND name="route" help="Show IPv4 routing table" mode="switch">
+      <COMMAND name="ip" help="Show IP level status (Layer-3)">
         <ACTION sym="script" in="tty" out="tty" interrupt="true">
-	  show -p ip route |pager
-	</ACTION>
+          ip -color addr |pager
+        </ACTION>
+
+        <SWITCH name="optional" min="0">
+          <COMMAND name="brief" help="Simplified (human-readable) output" mode="switch">
+            <ACTION sym="script" in="tty" out="tty" interrupt="true">
+              ip -color -br addr | sort -V | sed 's/@dsa[0-9]/     /' |pager
+            </ACTION>
+          </COMMAND>
+
+          <COMMAND name="detailed" help="Detailed (full) output" mode="switch">
+            <ACTION sym="script" in="tty" out="tty" interrupt="true">
+              ip -color -d addr |pager
+            </ACTION>
+          </COMMAND>
+
+          <COMMAND name="multicast" help="Show IGMP/MLD status" mode="switch">
+            <ACTION sym="script" in="tty" out="tty" interrupt="true">
+              mctl |pager
+            </ACTION>
+          </COMMAND>
+
+          <COMMAND name="route" help="Show IPv4 routing table" mode="switch">
+            <ACTION sym="script" in="tty" out="tty" interrupt="true">
+              show -p ip route |pager
+            </ACTION>
+          </COMMAND>
+        </SWITCH>
       </COMMAND>
-    </SWITCH>
-  </COMMAND>
 
-  <COMMAND name="ipv6" help="Show IPv6 level status (Layer-3)">
-    <ACTION sym="script" in="tty" out="tty" interrupt="true">
-      ip -color -6 addr |pager
-    </ACTION>
-
-    <SWITCH name="optional" min="0">
-      <COMMAND name="route" help="Show IPv6 routing table" mode="switch">
+      <COMMAND name="ipv6" help="Show IPv6 level status (Layer-3)">
         <ACTION sym="script" in="tty" out="tty" interrupt="true">
-	  show -p ipv6 route |pager
-	</ACTION>
+          ip -color -6 addr |pager
+        </ACTION>
+
+        <SWITCH name="optional" min="0">
+          <COMMAND name="route" help="Show IPv6 routing table" mode="switch">
+            <ACTION sym="script" in="tty" out="tty" interrupt="true">
+              show -p ipv6 route |pager
+            </ACTION>
+          </COMMAND>
+        </SWITCH>
       </COMMAND>
-    </SWITCH>
-  </COMMAND>
-
-  <COMMAND name="log" help="Show log file (jumps to end), default: syslog">
-    <PARAM name="fn" ptype="/LOGFILES" min="0" help="Optional log file to show"/>
-    <SWITCH name="optional" min="0">
-      <COMMAND name="tail" help="Show log tail, last N lines only">
-        <PARAM name="lines" ptype="/UINT" help="Last number of lines to show"/>
-      </COMMAND>
-    </SWITCH>
-    <ACTION sym="script" in="tty" out="tty" interrupt="true">
-      file=/log/${KLISH_PARAM_fn:-syslog}
-      case "$file" in
-        *.gz)
-          cmd=zcat
-          ;;
-        *)
-          cmd=cat
-          ;;
-      esac
-      if [ -n "$KLISH_PARAM_lines" ]; then
-        $cmd "$file" | tail -n $KLISH_PARAM_lines
-      else
-        $cmd "$file" | pager +G
-      fi
-    </ACTION>
-  </COMMAND>
-
-  <COMMAND name="uptime" help="Show system uptime">
-    <ACTION sym="script">uptime</ACTION>
-  </COMMAND>
-  <!-- TODO hostname, contact, location, base MAC, serial n:o, etc.
-    <COMMAND name="system-information" help="Show system information">
-    <ACTION sym="script">sysinfo</ACTION>
-    </COMMAND>
-  -->
-    <COMMAND name="version" help="Show software version">
-      <ACTION sym="script" in="tty" interrupt="true">cat /etc/version</ACTION>
-    </COMMAND>
-
-    <COMMAND name="factory-config" help="Show factory-config">
-      <ACTION sym="script" in="tty" out="tty" interrupt="true">jq -C . /etc/factory-config.cfg |pager</ACTION>
-    </COMMAND>
-
-    <COMMAND name="running-config" help="Show running-config">
-      <ACTION sym="script" in="tty" out="tty" interrupt="true">sysrepocfg -X -f json | jq -C . |pager</ACTION>
-    </COMMAND>
-
-    <COMMAND name="startup-config" help="Show startup-config">
-      <ACTION sym="script" in="tty" out="tty" interrupt="true">jq -C . /cfg/startup-config.cfg |pager</ACTION>
-    </COMMAND>
-  </COMMAND>
-  <COMMAND name="factory-reset" help="Restore the system to factory default state">
-    <ACTION sym="script" in="tty" out="tty" interrupt="true">
-      /bin/yorn "This will restore the device to factory defaults"
-    </ACTION>
-    <ACTION sym="srp_rpc@sysrepo">/ietf-factory-default:factory-reset</ACTION>
-  </COMMAND>
-
-  <COMMAND name="follow" help="Monitor a log file, use Ctrl-C to abort">
-    <PARAM name="fn" ptype="/LOGFILES" help="Optional log file to monitor, default: syslog"/>
-    <ACTION sym="script" in="tty" out="tty" interrupt="true">
-      file=${KLISH_PARAM_fn:-syslog}
-      echo -e "\e[1mPress Ctrl-C to abort ────────────────────────────────────────────\e[0m"
-      tail -F /log/$file
-    </ACTION>
-  </COMMAND>
-
-  <COMMAND name="netcalc" help="IP subnet calculator, with subnetting">
-    <PARAM name="addrlen" ptype="/STRING" help="ADDRESS[/LEN]"/>
-    <PARAM name="netmask" ptype="/STRING" min="0" help="Optional NETMASK"/>
-    <PARAM name="split"   ptype="/UINT" min="0" help="Split network: 1-32 (IPv4), 1-128 (IPv6)"/>
-    <ACTION sym="script" in="tty" out="tty" interrupt="true">
-      if [ -n "$KLISH_PARAM_split" ]; then
-        if echo $KLISH_PARAM_addrlen |grep -q ':'; then
-          split="-S $KLISH_PARAM_split"
-	else
-          split="-s $KLISH_PARAM_split"
-	fi
-      else
-	split=""
-      fi
-      netcalc $split $KLISH_PARAM_addrlen $KLISH_PARAM_netmask
-    </ACTION>
-  </COMMAND>
-
-  <COMMAND name="ping" help="Ping a network host or multicast group">
-    <SWITCH name="optional" min="0" max="9">
-      <COMMAND name="interface" help="Bypass routing table and use this interface">
-        <PARAM name="iface" ptype="/IFACES" help="Interface"/>
 
       <COMMAND name="lldp" help="Show LLDP neighbors">
         <ACTION sym="script" in="tty" out="tty" interrupt="true">
@@ -551,169 +464,259 @@
             /usr/libexec/statd/cli-pretty "show-lldp" |pager
         </ACTION>
       </COMMAND>
-      <COMMAND name="count" help="Number of packets to send, default: unlimited">
-        <PARAM name="cnt" ptype="/UINT"/>
+      
+      <COMMAND name="log" help="Show log file (jumps to end), default: syslog">
+        <PARAM name="fn" ptype="/LOGFILES" min="0" help="Optional log file to show"/>
+        <SWITCH name="optional" min="0">
+          <COMMAND name="tail" help="Show log tail, last N lines only">
+            <PARAM name="lines" ptype="/UINT" help="Last number of lines to show"/>
+          </COMMAND>
+        </SWITCH>
+        <ACTION sym="script" in="tty" out="tty" interrupt="true">
+          file=/log/${KLISH_PARAM_fn:-syslog}
+          case "$file" in
+            *.gz)
+              cmd=zcat
+              ;;
+            *)
+              cmd=cat
+              ;;
+          esac
+          if [ -n "$KLISH_PARAM_lines" ]; then
+            $cmd "$file" | tail -n $KLISH_PARAM_lines
+          else
+            $cmd "$file" | pager +G
+          fi
+        </ACTION>
       </COMMAND>
-      <COMMAND name="size" help="Define size of empty payload of packets">
-        <PARAM name="sz" ptype="/UINT"/>
+
+      <COMMAND name="uptime" help="Show system uptime">
+        <ACTION sym="script">uptime</ACTION>
       </COMMAND>
-      <COMMAND name="ttl" help="TTL to set in packets, default: 64 (multicast: 1)">
-        <PARAM name="ttl" ptype="/UINT"/>
+      <!-- TODO hostname, contact, location, base MAC, serial n:o, etc.
+        <COMMAND name="system-information" help="Show system information">
+        <ACTION sym="script">sysinfo</ACTION>
+        </COMMAND>
+      -->
+      <COMMAND name="version" help="Show software version">
+        <ACTION sym="script" in="tty" interrupt="true">cat /etc/version</ACTION>
       </COMMAND>
-      <COMMAND name="flood" help="Flood ping mode"/>
-    </SWITCH>
-    <PARAM name="addr" ptype="/STRING" help="Host address or multicast group"/>
-    <ACTION sym="script" in="tty" out="tty" interrupt="true">
-      count=${KLISH_PARAM_cnt:+-c $KLISH_PARAM_cnt}
-      iface=${KLISH_PARAM_iface:+-I $KLISH_PARAM_iface}
-      size=${KLISH_PARAM_sz:+-s $KLISH_PARAM_sz}
-      ttl=${KLISH_PARAM_ttl:+-t $KLISH_PARAM_ttl}
-      flood=${KLISH_PARAM_flood:+-f}
-      ping $iface $flood $count $size $ttl $KLISH_PARAM_addr
-    </ACTION>
-  </COMMAND>
 
-  <COMMAND name="tcpdump" help="Capture network traffic">
-    <PARAM name="iface" ptype="/IFACES" help="Interrface to run capture on"/>
-    <SWITCH name="optional" min="0" max="7">
-      <COMMAND name="count" help="Number of packets to capture, default: unlimited">
-        <PARAM name="count" ptype="/UINT"/>
+      <COMMAND name="factory-config" help="Show factory-config">
+        <ACTION sym="script" in="tty" out="tty" interrupt="true">jq -C . /etc/factory-config.cfg |pager</ACTION>
       </COMMAND>
-      <COMMAND name="size" help="Number of bytes of each packet to capture">
-        <PARAM name="sz"  ptype="/UINT"/>
+
+      <COMMAND name="running-config" help="Show running-config">
+        <ACTION sym="script" in="tty" out="tty" interrupt="true">sysrepocfg -X -f json | jq -C . |pager</ACTION>
       </COMMAND>
-      <COMMAND name="expression" help="Optional pcap filter expression">
-        <PARAM name="expr" ptype="/STRING" help='Filter expression, e.g. "tcp port 80"'/>
+
+      <COMMAND name="startup-config" help="Show startup-config">
+        <ACTION sym="script" in="tty" out="tty" interrupt="true">jq -C . /cfg/startup-config.cfg |pager</ACTION>
       </COMMAND>
-      <COMMAND name="verbose" help="Verbose output"/>
-    </SWITCH>
-    <ACTION sym="script" in="tty" out="tty" interrupt="true">
-      count=${KLISH_PARAM_cnt:+-c $KLISH_PARAM_cnt}
-      size=${KLISH_PARAM_sz:+-s $KLISH_PARAM_sz}
-      verbose=${KLISH_PARAM_verbose:+-vvv}
-      doas tcpdump -ln $count $size $verbose -i $KLISH_PARAM_iface $KLISH_PARAM_expr
-    </ACTION>
-  </COMMAND>
+    </COMMAND>
 
-  <COMMAND name="upgrade" help="Install a software update bundle from remote or local file">
-    <PARAM name="URI" ptype="/STRING" help="[(ftp|tftp|http|https|sftp)://(dns.name | ip.address)/path/to/]upgrade-bundle.pkg"/>
-    <SWITCH name="optional" min="0" max="1">
-      <COMMAND name="force" help="Force upgrade, ignoring compatibility check."/>
-    </SWITCH>
-    <ACTION sym="script" in="tty" out="tty" interrupt="true">
-      force=${KLISH_PARAM_force:+--ignore-compatible}
-      rauc install $force $KLISH_PARAM_URI
-    </ACTION>
-  </COMMAND>
+    <COMMAND name="factory-reset" help="Restore the system to factory default state">
+      <ACTION sym="script" in="tty" out="tty" interrupt="true">
+        /bin/yorn "This will restore the device to factory defaults"
+      </ACTION>
+      <ACTION sym="srp_rpc@sysrepo">/ietf-factory-default:factory-reset</ACTION>
+    </COMMAND>
 
-</VIEW>
+    <COMMAND name="follow" help="Monitor a log file, use Ctrl-C to abort">
+      <PARAM name="fn" ptype="/LOGFILES" help="Optional log file to monitor, default: syslog"/>
+      <ACTION sym="script" in="tty" out="tty" interrupt="true">
+        file=${KLISH_PARAM_fn:-syslog}
+        echo -e "\e[1mPress Ctrl-C to abort ────────────────────────────────────────────\e[0m"
+        tail -F /log/$file
+      </ACTION>
+    </COMMAND>
 
-<VIEW name="config">
+    <COMMAND name="netcalc" help="IP subnet calculator, with subnetting">
+      <PARAM name="addrlen" ptype="/STRING" help="ADDRESS[/LEN]"/>
+      <PARAM name="netmask" ptype="/STRING" min="0" help="Optional NETMASK"/>
+      <PARAM name="split"   ptype="/UINT" min="0" help="Split network: 1-32 (IPv4), 1-128 (IPv6)"/>
+      <ACTION sym="script" in="tty" out="tty" interrupt="true">
+        if [ -n "$KLISH_PARAM_split" ]; then
+          if echo $KLISH_PARAM_addrlen |grep -q ':'; then
+            split="-S $KLISH_PARAM_split"
+          else
+            split="-s $KLISH_PARAM_split"
+          fi
+        else
+          split=""
+        fi
+        netcalc $split $KLISH_PARAM_addrlen $KLISH_PARAM_netmask
+      </ACTION>
+    </COMMAND>
 
-  <PROMPT>
-    <ACTION sym="srp_prompt@sysrepo">%u@%h:%w%x/> </ACTION>
-  </PROMPT>
+    <COMMAND name="ping" help="Ping a network host or multicast group">
+      <SWITCH name="optional" min="0" max="9">
+        <COMMAND name="interface" help="Bypass routing table and use this interface">
+          <PARAM name="iface" ptype="/IFACES" help="Interface"/>
+        </COMMAND>
+        <COMMAND name="count" help="Number of packets to send, default: unlimited">
+          <PARAM name="cnt" ptype="/UINT"/>
+        </COMMAND>
+        <COMMAND name="size" help="Define size of empty payload of packets">
+          <PARAM name="sz" ptype="/UINT"/>
+        </COMMAND>
+        <COMMAND name="ttl" help="TTL to set in packets, default: 64 (multicast: 1)">
+          <PARAM name="ttl" ptype="/UINT"/>
+        </COMMAND>
+        <COMMAND name="flood" help="Flood ping mode"/>
+      </SWITCH>
+      <PARAM name="addr" ptype="/STRING" help="Host address or multicast group"/>
+      <ACTION sym="script" in="tty" out="tty" interrupt="true">
+        count=${KLISH_PARAM_cnt:+-c $KLISH_PARAM_cnt}
+        iface=${KLISH_PARAM_iface:+-I $KLISH_PARAM_iface}
+        size=${KLISH_PARAM_sz:+-s $KLISH_PARAM_sz}
+        ttl=${KLISH_PARAM_ttl:+-t $KLISH_PARAM_ttl}
+        flood=${KLISH_PARAM_flood:+-f}
+        ping $iface $flood $count $size $ttl $KLISH_PARAM_addr
+      </ACTION>
+    </COMMAND>
 
-<HOTKEY key="^D" cmd="exit"/>
-<HOTKEY key="^Z" cmd="leave"/>
+    <COMMAND name="tcpdump" help="Capture network traffic">
+      <PARAM name="iface" ptype="/IFACES" help="Interrface to run capture on"/>
+      <SWITCH name="optional" min="0" max="7">
+        <COMMAND name="count" help="Number of packets to capture, default: unlimited">
+          <PARAM name="count" ptype="/UINT"/>
+        </COMMAND>
+        <COMMAND name="size" help="Number of bytes of each packet to capture">
+          <PARAM name="sz"  ptype="/UINT"/>
+        </COMMAND>
+        <COMMAND name="expression" help="Optional pcap filter expression">
+          <PARAM name="expr" ptype="/STRING" help='Filter expression, e.g. "tcp port 80"'/>
+        </COMMAND>
+        <COMMAND name="verbose" help="Verbose output"/>
+      </SWITCH>
+      <ACTION sym="script" in="tty" out="tty" interrupt="true">
+        count=${KLISH_PARAM_cnt:+-c $KLISH_PARAM_cnt}
+        size=${KLISH_PARAM_sz:+-s $KLISH_PARAM_sz}
+        verbose=${KLISH_PARAM_verbose:+-vvv}
+        doas tcpdump -ln $count $size $verbose -i $KLISH_PARAM_iface $KLISH_PARAM_expr
+      </ACTION>
+    </COMMAND>
 
-<!-- Move -->
+    <COMMAND name="upgrade" help="Install a software update bundle from remote or local file">
+      <PARAM name="URI" ptype="/STRING" help="[(ftp|tftp|http|https|sftp)://(dns.name | ip.address)/path/to/]upgrade-bundle.pkg"/>
+      <SWITCH name="optional" min="0" max="1">
+        <COMMAND name="force" help="Force upgrade, ignoring compatibility check."/>
+      </SWITCH>
+      <ACTION sym="script" in="tty" out="tty" interrupt="true">
+        force=${KLISH_PARAM_force:+--ignore-compatible}
+        rauc install $force $KLISH_PARAM_URI
+      </ACTION>
+    </COMMAND>
 
-<COMMAND name="abort" help="Abort changes in candidate and return to admin-exec">
-  <ACTION sym="srp_reset@sysrepo"/>
-  <ACTION sym="nav">replace main</ACTION>
-</COMMAND>
+  </VIEW>
 
-<COMMAND name="leave" help="Apply candidate to running-config and return to admin-exec">
-  <ACTION sym="srp_commit@sysrepo"/>
-  <ACTION sym="srp_top@sysrepo"/>
-  <ACTION sym="nav" exec_on="success">replace main</ACTION>
-</COMMAND>
+  <VIEW name="config">
 
-<COMMAND name="up" help="Ascend to the parent configuration node">
-  <ACTION sym="srp_up@sysrepo"/>
-</COMMAND>
+    <PROMPT>
+      <ACTION sym="srp_prompt@sysrepo">%u@%h:%w%x/> </ACTION>
+    </PROMPT>
 
-<COMMAND name="end" help="Alias to up, leave this subsection/node">
-  <ACTION sym="srp_up@sysrepo"/>
-</COMMAND>
+    <HOTKEY key="^D" cmd="exit"/>
+    <HOTKEY key="^Z" cmd="leave"/>
 
-<COMMAND name="exit" help="Ascend to parent configuration node, or abort (from top)">
-  <ACTION sym="srp_up@sysrepo"/>
-  <ACTION sym="srp_reset@sysrepo" exec_on="fail" update_retcode="false"/>
-  <ACTION sym="nav" exec_on="fail">replace main</ACTION>
-</COMMAND>
+    <!-- Move -->
 
-<COMMAND name="top" help="Ascend to the configuration root">
-  <ACTION sym="srp_top@sysrepo"/>
-</COMMAND>
+    <COMMAND name="abort" help="Abort changes in candidate and return to admin-exec">
+      <ACTION sym="srp_reset@sysrepo"/>
+      <ACTION sym="nav">replace main</ACTION>
+    </COMMAND>
 
-<COMMAND name="edit" help="Descend to the specified configuration node">
-  <PARAM name="path" ptype="/PLINE_EDIT" max="100"/>
-  <ACTION sym="srp_edit@sysrepo"/>
-</COMMAND>
+    <COMMAND name="leave" help="Apply candidate to running-config and return to admin-exec">
+      <ACTION sym="srp_commit@sysrepo"/>
+      <ACTION sym="srp_top@sysrepo"/>
+      <ACTION sym="nav" exec_on="success">replace main</ACTION>
+    </COMMAND>
 
-<!-- Edit -->
+    <COMMAND name="up" help="Ascend to the parent configuration node">
+      <ACTION sym="srp_up@sysrepo"/>
+    </COMMAND>
 
-<COMMAND name="text-editor" help="Modify binary content in a text editor">
-  <PARAM name="path" ptype="/PLINE_SET" max="100"/>
-  <ACTION sym="srp_helper@sysrepo" in="tty" out="tty" interrupt="true"/>
-</COMMAND>
+    <COMMAND name="end" help="Alias to up, leave this subsection/node">
+      <ACTION sym="srp_up@sysrepo"/>
+    </COMMAND>
 
-<COMMAND name="change" help="Interactively change setting, e.g. password">
-  <PARAM name="path" ptype="/PLINE_SET" max="100"/>
-  <ACTION sym="srp_helper@sysrepo" in="tty" out="tty" interrupt="true"/>
-</COMMAND>
+    <COMMAND name="exit" help="Ascend to parent configuration node, or abort (from top)">
+      <ACTION sym="srp_up@sysrepo"/>
+      <ACTION sym="srp_reset@sysrepo" exec_on="fail" update_retcode="false"/>
+      <ACTION sym="nav" exec_on="fail">replace main</ACTION>
+    </COMMAND>
 
-<COMMAND name="set" help="Set configuration setting">
-  <PARAM name="path" ptype="/PLINE_SET" max="100"/>
-  <ACTION sym="srp_set@sysrepo" in="tty" out="tty" interrupt="true"/>
-</COMMAND>
+    <COMMAND name="top" help="Ascend to the configuration root">
+      <ACTION sym="srp_top@sysrepo"/>
+    </COMMAND>
 
-<COMMAND name="delete" help="Delete configuration setting(s)">
-  <PARAM name="path" ptype="/PLINE_DEL" max="100"/>
-  <ACTION sym="srp_del@sysrepo"/>
-</COMMAND>
+    <COMMAND name="edit" help="Descend to the specified configuration node">
+      <PARAM name="path" ptype="/PLINE_EDIT" max="100"/>
+      <ACTION sym="srp_edit@sysrepo"/>
+    </COMMAND>
 
-<COMMAND name="no" help="Alias to delete">
-  <PARAM name="path" ptype="/PLINE_DEL" max="100"/>
-  <ACTION sym="srp_del@sysrepo"/>
-</COMMAND>
+    <!-- Edit -->
 
-<COMMAND name="commit" help="Commit current candidate to running-config">
-  <ACTION sym="srp_commit@sysrepo"/>
-</COMMAND>
+    <COMMAND name="text-editor" help="Modify binary content in a text editor">
+      <PARAM name="path" ptype="/PLINE_SET" max="100"/>
+      <ACTION sym="srp_helper@sysrepo" in="tty" out="tty" interrupt="true"/>
+    </COMMAND>
 
-<COMMAND name="reset" help="Reset candidate to running-config">
-  <ACTION sym="srp_reset@sysrepo"/>
-</COMMAND>
+    <COMMAND name="change" help="Interactively change setting, e.g. password">
+      <PARAM name="path" ptype="/PLINE_SET" max="100"/>
+      <ACTION sym="srp_helper@sysrepo" in="tty" out="tty" interrupt="true"/>
+    </COMMAND>
 
-<!-- Display -->
+    <COMMAND name="set" help="Set configuration setting">
+      <PARAM name="path" ptype="/PLINE_SET" max="100"/>
+      <ACTION sym="srp_set@sysrepo" in="tty" out="tty" interrupt="true"/>
+    </COMMAND>
 
-<COMMAND name="check" help="Validate candidate">
-  <ACTION sym="srp_verify@sysrepo"/>
-</COMMAND>
+    <COMMAND name="delete" help="Delete configuration setting(s)">
+      <PARAM name="path" ptype="/PLINE_DEL" max="100"/>
+      <ACTION sym="srp_del@sysrepo"/>
+    </COMMAND>
 
-<COMMAND name="help" help="Show YANG description for setting(s)">
-  <PARAM name="path" ptype="/PLINE_SET" max="100" min="0"/>
-  <ACTION sym="srp_help_text@sysrepo"/>
-</COMMAND>
+    <COMMAND name="no" help="Alias to delete">
+      <PARAM name="path" ptype="/PLINE_DEL" max="100"/>
+      <ACTION sym="srp_del@sysrepo"/>
+    </COMMAND>
 
-<COMMAND name="show" help="Show configuration">
-  <PARAM name="path" ptype="/PLINE_SET" min="0" max="100"/>
-  <ACTION sym="srp_show@sysrepo"/>
-</COMMAND>
+    <COMMAND name="commit" help="Commit current candidate to running-config">
+      <ACTION sym="srp_commit@sysrepo"/>
+    </COMMAND>
 
-<COMMAND name="diff" help="Summarize uncommitted changes">
-  <PARAM name="path" ptype="/PLINE_SET" min="0" max="100"/>
-  <ACTION sym="srp_diff@sysrepo"/>
-</COMMAND>
+    <COMMAND name="reset" help="Reset candidate to running-config">
+      <ACTION sym="srp_reset@sysrepo"/>
+    </COMMAND>
 
-<!-- Misc -->
+    <!-- Display -->
 
-<COMMAND name="do" help="Execute operational mode command">
-  <VIEW name="operational" ref="/main"/>
-</COMMAND>
+    <COMMAND name="check" help="Validate candidate">
+      <ACTION sym="srp_verify@sysrepo"/>
+    </COMMAND>
 
-</VIEW>
+    <COMMAND name="help" help="Show YANG description for setting(s)">
+      <PARAM name="path" ptype="/PLINE_SET" max="100" min="0"/>
+      <ACTION sym="srp_help_text@sysrepo"/>
+    </COMMAND>
+
+    <COMMAND name="show" help="Show configuration">
+      <PARAM name="path" ptype="/PLINE_SET" min="0" max="100"/>
+      <ACTION sym="srp_show@sysrepo"/>
+    </COMMAND>
+
+    <COMMAND name="diff" help="Summarize uncommitted changes">
+      <PARAM name="path" ptype="/PLINE_SET" min="0" max="100"/>
+      <ACTION sym="srp_diff@sysrepo"/>
+    </COMMAND>
+
+    <!-- Misc -->
+
+    <COMMAND name="do" help="Execute operational mode command">
+      <VIEW name="operational" ref="/main"/>
+    </COMMAND>
+
+  </VIEW>
 </KLISH>

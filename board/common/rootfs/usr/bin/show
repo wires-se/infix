@@ -249,7 +249,7 @@ routes()
 	arg="-i ipv4"
     fi
     sysrepocfg -f json -X -d operational -x "/ietf-routing:routing/ribs" | \
-	/usr/libexec/statd/cli-pretty "show-routing-table" $arg
+	/usr/libexec/statd/cli-pretty "show-routes" $arg
 }
 
 igmp()

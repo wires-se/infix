@@ -1327,8 +1327,8 @@ def main():
 
     parser.add_argument('-t', '--test', action='store_true', help='Enable unit test mode')
 
-    parser_show_routing_table = subparsers.add_parser('show-routing-table', help='Show the routing table')
-    parser_show_routing_table.add_argument('-i', '--ip', required=True, help='IPv4 or IPv6 address')
+    subparsers.add_parser('show-routes', help='Show the routing table') \
+        .add_argument('-i', '--ip', required=True, help='IPv4 or IPv6 address')
 
     parser_show_interfaces = subparsers.add_parser('show-interfaces', help='Show interfaces')
     parser_show_interfaces.add_argument('-n', '--name', help='Interface name')
@@ -1355,7 +1355,7 @@ def main():
 
     if args.command == "show-interfaces":
         show_interfaces(json_data, args.name)
-    elif args.command == "show-routing-table":
+    elif args.command == "show-routes":
         show_routing_table(json_data, args.ip)
     elif args.command == "show-software":
         show_software(json_data, args.name)
