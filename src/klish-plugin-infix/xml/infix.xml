@@ -544,6 +544,12 @@
     <SWITCH name="optional" min="0" max="9">
       <COMMAND name="interface" help="Bypass routing table and use this interface">
         <PARAM name="iface" ptype="/IFACES" help="Interface"/>
+
+      <COMMAND name="lldp" help="Show LLDP neighbors">
+        <ACTION sym="script" in="tty" out="tty" interrupt="true">
+          sysrepocfg -d operational -X -f json -x /ieee802-dot1ab-lldp:lldp | \
+            /usr/libexec/statd/cli-pretty "show-lldp" |pager
+        </ACTION>
       </COMMAND>
       <COMMAND name="count" help="Number of packets to send, default: unlimited">
         <PARAM name="cnt" ptype="/UINT"/>
