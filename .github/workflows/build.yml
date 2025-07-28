@@ -11,7 +11,7 @@ on:
       parallel:
         description: 'Massive parallel build of each image'
         required: false
-        default: true
+        default: false
         type: boolean
       infix_repo:
         description: 'Repo to checkout (for spin overrides)'
@@ -36,6 +36,10 @@ on:
         required: false
         type: string
         default: kernelkit/infix
+      parallel:
+        required: false
+        type: boolean
+        default: false
 
 env:
   FLV: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.flavor || inputs.flavor }}
