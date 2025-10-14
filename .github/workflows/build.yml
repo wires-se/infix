@@ -36,6 +36,14 @@ on:
         required: false
         type: boolean
         default: true
+      bump_infix:
+        required: false
+        type: boolean
+        default: false
+    secrets:
+      CHECKOUT_TOKEN:
+        required: false
+        description: 'Token for checking out private fork'
 
 env:
   NAME: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.name || inputs.name }}
@@ -68,6 +76,18 @@ jobs:
           clean: true
           fetch-depth: 0
           submodules: recursive
+          token: ${{ secrets.CHECKOUT_TOKEN || github.token }}
+
+      # For Infix spins: when bump_infix is set, update the infix submodule
+      # (at ./infix/) to the latest main branch. This enables canary builds
+      # that test spins against bleeding-edge Infix changes.
+      - name: Bump infix submodule
+        if: ${{ inputs.bump_infix }}
+        run: |
+          cd infix
+          git fetch origin
+          git checkout origin/main
+          git submodule update --recursive --init
 
       - name: Set Build Variables
         id: vars
