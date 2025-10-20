@@ -40,10 +40,6 @@ on:
         required: false
         type: boolean
         default: false
-    secrets:
-      CHECKOUT_TOKEN:
-        required: false
-        description: 'Token for checking out private fork'
 
 env:
   NAME: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.name || inputs.name }}
@@ -76,7 +72,6 @@ jobs:
           clean: true
           fetch-depth: 0
           submodules: recursive
-          token: ${{ secrets.CHECKOUT_TOKEN || github.token }}
 
       # For Infix spins: when bump_infix is set, update the infix submodule
       # (at ./infix/) to the latest main branch. This enables canary builds
