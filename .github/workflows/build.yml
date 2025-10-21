@@ -36,10 +36,11 @@ on:
         required: false
         type: boolean
         default: true
-      bump_infix:
+      pre_build_script:
         required: false
-        type: boolean
-        default: false
+        type: string
+        default: ''
+        description: 'Optional script to run after checkout (for spin customization)'
     secrets:
       CHECKOUT_TOKEN:
         required: false
@@ -78,16 +79,14 @@ jobs:
           submodules: recursive
           token: ${{ secrets.CHECKOUT_TOKEN || github.token }}
 
-      # For Infix spins: when bump_infix is set, update the infix submodule
-      # (at ./infix/) to the latest main branch. This enables canary builds
-      # that test spins against bleeding-edge Infix changes.
-      - name: Bump infix submodule
-        if: ${{ inputs.bump_infix }}
+      - name: Run pre-build script
+        if: ${{ inputs.pre_build_script != '' }}
         run: |
-          cd infix
-          git fetch origin
-          git checkout origin/main
-          git submodule update --recursive --init
+          cat > /tmp/pre-build.sh << 'EOF'
+          ${{ inputs.pre_build_script }}
+          EOF
+          chmod +x /tmp/pre-build.sh
+          bash /tmp/pre-build.sh
 
       - name: Set Build Variables
         id: vars
