@@ -12,23 +12,33 @@ AC_PROG_CXX
 AC_PROG_INSTALL
 
 #
-# FRR gRPC northbound API (optional, enabled by default)
+# FRR backend selection
 #
 AC_ARG_WITH(frr,
-        AS_HELP_STRING([--without-frr], [Build without FRR integration (use Linux kernel backend)]),
+        AS_HELP_STRING([--with-frr], [Build with FRR gRPC backend]),
 	[with_frr=$withval],
-	[with_frr=yes])
+	[with_frr=no])
+
+AC_ARG_WITH(frr-conf,
+        AS_HELP_STRING([--with-frr-conf], [Build with FRR frr.conf file backend (default when FRR available)]),
+	[with_frr_conf=$withval],
+	[with_frr_conf=no])
+
+# Mutual exclusion check
+AS_IF([test "x$with_frr" = "xyes" -a "x$with_frr_conf" = "xyes"], [
+        AC_MSG_ERROR([--with-frr and --with-frr-conf are mutually exclusive])
+])
 
 AS_IF([test "x$with_frr" = "xyes"], [
         # Check for protoc and grpc_cpp_plugin
         AC_PATH_PROG([PROTOC], [protoc], [no])
         AS_IF([test "x$PROTOC" = "xno"], [
-                AC_MSG_ERROR([protoc not found, required for FRR support (use --without-frr to disable)])
+                AC_MSG_ERROR([protoc not found, required for FRR gRPC support])
         ])
 
         AC_PATH_PROG([GRPC_CPP_PLUGIN], [grpc_cpp_plugin], [no])
         AS_IF([test "x$GRPC_CPP_PLUGIN" = "xno"], [
-                AC_MSG_ERROR([grpc_cpp_plugin not found, required for FRR support (use --without-frr to disable)])
+                AC_MSG_ERROR([grpc_cpp_plugin not found, required for FRR gRPC support])
         ])
 
         # Check for grpc++ and protobuf libraries
@@ -41,7 +51,12 @@ AS_IF([test "x$with_frr" = "xyes"], [
         AC_SUBST(GRPC_CPP_PLUGIN)
 ])
 
+AS_IF([test "x$with_frr_conf" = "xyes"], [
+        AC_DEFINE(HAVE_FRR_CONF, 1, [Built with FRR frr.conf file backend])
+])
+
 AM_CONDITIONAL(HAVE_FRR_GRPC, [test "x$with_frr" = "xyes"])
+AM_CONDITIONAL(HAVE_FRR_CONF, [test "x$with_frr_conf" = "xyes"])
 
 # Check for pkg-config first
 PKG_PROG_PKG_CONFIG
@@ -74,8 +89,7 @@ cat <<EOF
   Prefix................: $prefix
   Exec prefix...........: $eprefix
   Sysconfdir............: `eval echo $sysconfdir`
-  FRR integration.......: $with_frr
-  Backend...............: $(test "x$with_frr" = "xyes" && echo "FRR gRPC" || echo "Linux kernel")
+  Backend...............: $(test "x$with_frr" = "xyes" && echo "FRR gRPC" || (test "x$with_frr_conf" = "xyes" && echo "FRR frr.conf" || echo "Linux kernel"))
   C Compiler............: $CC $CFLAGS $CPPFLAGS $LDFLAGS $LIBS
 
 ------------- Compiler version --------------

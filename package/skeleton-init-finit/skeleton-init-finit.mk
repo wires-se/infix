@@ -85,6 +85,12 @@ SKELETON_INIT_FINIT_POST_INSTALL_TARGET_HOOKS += SKELETON_INIT_FINIT_SET_DROPBEA
 endif
 
 ifeq ($(BR2_PACKAGE_FRR),y)
+ifeq ($(BR2_PACKAGE_NETD_FRR_CONF),y)
+define SKELETON_INIT_FINIT_SET_FRR
+	cp $(SKELETON_INIT_FINIT_AVAILABLE)/frr/frr.conf $(FINIT_D)/available/frr.conf
+	ln -sf ../available/frr.conf $(FINIT_D)/enabled/frr.conf
+endef
+else
 define SKELETON_INIT_FINIT_SET_FRR
 	for svc in babeld bfdd bgpd mgmtd eigrpd isisd ldpd ospfd ospf6d pathd ripd ripng staticd vrrpd zebra; do	\
 		cp $(SKELETON_INIT_FINIT_AVAILABLE)/frr/$$svc.conf $(FINIT_D)/available/$$svc.conf;		\
@@ -93,6 +99,7 @@ define SKELETON_INIT_FINIT_SET_FRR
 	ln -sf ../available/staticd.conf $(FINIT_D)/enabled/staticd.conf
 	ln -sf ../available/mgmtd.conf $(FINIT_D)/enabled/mgmtd.conf
 endef
+endif
 SKELETON_INIT_FINIT_POST_INSTALL_TARGET_HOOKS += SKELETON_INIT_FINIT_SET_FRR
 endif # BR2_PACKAGE_FRR
 

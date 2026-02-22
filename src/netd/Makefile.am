@@ -8,7 +8,7 @@ netd_CFLAGS         = -W -Wall -Wextra
 netd_CFLAGS        += $(libite_CFLAGS) $(libconfuse_CFLAGS) $(jansson_CFLAGS)
 netd_LDADD          = $(libite_LIBS) $(libconfuse_LIBS) $(jansson_LIBS)
 
-# Backend selection: FRR gRPC or Linux kernel
+# Backend selection: FRR gRPC, FRR frr.conf, or Linux kernel
 if HAVE_FRR_GRPC
 BUILT_SOURCES = grpc/frr-northbound.pb.cc grpc/frr-northbound.pb.h \
                 grpc/frr-northbound.grpc.pb.cc grpc/frr-northbound.grpc.pb.h
@@ -29,6 +29,11 @@ netd_LDADD         += $(grpc_LIBS) $(protobuf_LIBS) -lstdc++
 
 CLEANFILES = grpc/*.pb.cc grpc/*.pb.h
 else
+if HAVE_FRR_CONF
+# FRR frr.conf file backend
+netd_SOURCES       += src/frrconf_backend.c src/frrconf_backend.h
+else
 # Linux kernel backend (no FRR)
 netd_SOURCES       += src/linux_backend.c src/linux_backend.h
+endif
 endif

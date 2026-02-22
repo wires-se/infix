@@ -15,6 +15,13 @@ static void backend_cleanup(void) { grpc_backend_cleanup(); }
 static int backend_apply(struct route_head *routes, struct rip_config *rip) {
 	return grpc_backend_apply(routes, rip);
 }
+#elif defined(HAVE_FRR_CONF)
+#include "frrconf_backend.h"
+static int backend_init(void)    { return frrconf_backend_init(); }
+static void backend_cleanup(void) { frrconf_backend_cleanup(); }
+static int backend_apply(struct route_head *routes, struct rip_config *rip) {
+	return frrconf_backend_apply(routes, rip);
+}
 #else
 #include "linux_backend.h"
 static int backend_init(void)    { return linux_backend_init(); }
@@ -35,6 +42,8 @@ static struct rip_config active_rip;
 static void sighup_handler(int sig)
 {
 	(void)sig;
+
+	INFO("Got SIGHUP, reloading ...");
 	do_reload = 1;
 }
 
@@ -197,8 +206,9 @@ static void reload(void)
 				ERROR("Failed to launch system command: %s", cmd->command);
 		}
 	}
-	pidfile(NULL);
+
 	INFO("Configuration reloaded");
+	pidfile(NULL);
 }
 
 static int usage(int rc)
@@ -213,7 +223,7 @@ static int usage(int rc)
 int main(int argc, char *argv[])
 {
 	int log_opts = LOG_PID | LOG_NDELAY;
-	struct sigaction sa;
+	struct sigaction sa = { 0 };
 	int c;
 
 	while ((c = getopt(argc, argv, "dhp:")) != -1) {
@@ -230,10 +240,10 @@ int main(int argc, char *argv[])
 	}
 
 	openlog("netd", log_opts, LOG_DAEMON);
-	INFO("netd starting");
+	setlogmask(LOG_UPTO(LOG_INFO));
+	INFO("starting");
 
 	/* Set up signal handlers */
-	memset(&sa, 0, sizeof(sa));
 	sa.sa_handler = sighup_handler;
 	sigaction(SIGHUP, &sa, NULL);
 
@@ -253,7 +263,6 @@ int main(int argc, char *argv[])
 	/* Initial load */
 	do_reload = 1;
 
-	pidfile(NULL);
 	while (!do_shutdown) {
 		if (do_reload) {
 			do_reload = 0;
@@ -262,7 +271,7 @@ int main(int argc, char *argv[])
 		pause();
 	}
 
-	INFO("netd shutting down");
+	INFO("shutting down");
 
 	route_list_free(&active_routes);
 	rip_config_free(&active_rip);

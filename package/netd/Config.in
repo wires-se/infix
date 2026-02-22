@@ -13,10 +13,21 @@ config BR2_PACKAGE_NETD
 
 if BR2_PACKAGE_NETD
 
-config BR2_PACKAGE_NETD_FRR
-	bool "FRR integration"
+config BR2_PACKAGE_NETD_FRR_CONF
+	bool "FRR frr.conf backend"
 	default y if BR2_PACKAGE_FRR
 	depends on BR2_PACKAGE_FRR
+	help
+	  Enable FRR integration via frr.conf file generation.
+	  netd assembles a single /etc/frr/frr.conf from routing
+	  config and signals FRR to reload via frrinit.sh.
+
+	  Provides full routing support (static routes, RIP, OSPF).
+
+config BR2_PACKAGE_NETD_FRR
+	bool "FRR gRPC backend"
+	depends on BR2_PACKAGE_FRR
+	depends on !BR2_PACKAGE_NETD_FRR_CONF
 	select BR2_PACKAGE_PROTOBUF
 	select BR2_PACKAGE_GRPC
 	select BR2_PACKAGE_HOST_PROTOBUF
