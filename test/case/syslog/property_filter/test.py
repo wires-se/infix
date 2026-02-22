@@ -7,7 +7,7 @@ message properties with different operators, case-insensitivity, and negation.
 """
 
 import infamy
-import time
+from infamy.util import until
 
 TEST_MESSAGES = [
     ("myapp", "Application startup"),
@@ -90,12 +90,12 @@ with infamy.Test() as test:
             }
         })
 
-        time.sleep(2)
+        until(lambda: tgtssh.runsh("test -f /var/log/baseline").returncode == 0, attempts=10)
 
     with test.step("Send test messages"):
         for tag, msg in TEST_MESSAGES:
             tgtssh.runsh(f"logger -t {tag} -p daemon.info '{msg}'")
-        time.sleep(1)
+        until(lambda: "Application startup" in tgtssh.runsh("cat /var/log/baseline 2>/dev/null").stdout, attempts=10)
 
     with test.step("Verify myapp log contains only myapp messages"):
         rc = tgtssh.runsh("grep -c 'myapp' /var/log/myapp 2>/dev/null")

@@ -8,7 +8,7 @@ actions (log vs block/stop).
 """
 
 import infamy
-import time
+from infamy.util import until
 
 TEST_MESSAGES = [
     ("daemon.emerg",   "Emergency: system is unusable"),
@@ -73,12 +73,12 @@ with infamy.Test() as test:
             }
         })
 
-        time.sleep(2)
+        until(lambda: tgtssh.runsh("test -f /var/log/exact-errors").returncode == 0, attempts=10)
 
     with test.step("Send test messages at all severity levels"):
         for priority, message in TEST_MESSAGES:
             tgtssh.runsh(f"logger -t advtest -p {priority} '{message}'")
-        time.sleep(2)
+        until(lambda: "Error: error condition" in tgtssh.runsh("cat /var/log/exact-errors 2>/dev/null").stdout, attempts=10)
 
     with test.step("Verify exact-errors log contains only error messages"):
         rc = tgtssh.runsh("cat /var/log/exact-errors 2>/dev/null")
