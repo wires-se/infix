@@ -1,16 +1,13 @@
 #!/usr/bin/env python3
-#
-# Add join the group 224.1.1.1 from data1 on the host. Send to that
-# group from `msend`, verify that `mrecv` receives it and that `!memb`
-# does not.
-#
+"""IGMP basic
 
-"""
-IGMP basic
+Verify basic IGMP snooping behavior on a bridge.  Without any IGMP
+membership, multicast should be flooded to all ports.  Once a host
+joins a group, the bridge should learn the membership via IGMP and
+only forward matching multicast to the member port, pruning it from
+non-member ports.
 
-Verify that all multicast get flooded when no IGMP join exists in the system and
-the flooding stops as soon a join arrives
-
+....
               .1
  .---------------------------.
  |            DUT            |
@@ -23,12 +20,20 @@ the flooding stops as soon a join arrives
  '-------' '-------' '-------'
     .2         .3        .4
              HOST
+....
+
+A multicast sender on `msend` sends to group 224.1.1.1.  First, with
+no IGMP joins, verify the group is flooded to both `mrecv` and `!memb`.
+Then `mrecv` joins the group and the test waits for the bridge MDB to
+reflect the membership before verifying that `!memb` no longer receives
+the group.
 
 """
 
 import infamy
-import time
+import infamy.iface as iface
 import infamy.multicast as mcast
+from infamy.util import until
 
 query_interval = 4
 
@@ -118,21 +123,7 @@ with infamy.Test() as test:
                             receive_ns.must_receive("ip dst 224.1.1.1")
 
                         with test.step("Verify that the group 224.1.1.1 is no longer received on host:data3"):
-                            attempt = 0
-
-                            # This retry loop exists to handle the case where the first query is lost due
-                            # to the network just starting up. In particular there's a case where a newly
-                            # created bridge uses the "NOOP" scheduler (noop_enqueue()) for a split second
-                            # while it's starting up, which might drop the first query msg.
-                            while attempt <= query_interval:
-                                try:
-                                    nojoin_ns.must_not_receive("ip dst 224.1.1.1")
-                                    break
-                                except Exception as e:
-                                    attempt += 1
-                                    if attempt > query_interval:
-                                        test.fail()
-                                    else:
-                                        print(f"Got mcast flood, retrying ({attempt}/{query_interval})")
+                            until(lambda: iface.exist_bridge_multicast_filter(target, "224.1.1.1", mreceive, "br0"), attempts=10)
+                            nojoin_ns.must_not_receive("ip dst 224.1.1.1")
 
     test.succeed()
