@@ -24,9 +24,20 @@ AC_ARG_WITH(frr-conf,
 	[with_frr_conf=$withval],
 	[with_frr_conf=no])
 
+AC_ARG_WITH(frr-vtysh,
+        AS_HELP_STRING([--with-frr-vtysh], [Build with FRR vtysh -b backend (incremental config)]),
+	[with_frr_vtysh=$withval],
+	[with_frr_vtysh=no])
+
 # Mutual exclusion check
 AS_IF([test "x$with_frr" = "xyes" -a "x$with_frr_conf" = "xyes"], [
         AC_MSG_ERROR([--with-frr and --with-frr-conf are mutually exclusive])
+])
+AS_IF([test "x$with_frr" = "xyes" -a "x$with_frr_vtysh" = "xyes"], [
+        AC_MSG_ERROR([--with-frr and --with-frr-vtysh are mutually exclusive])
+])
+AS_IF([test "x$with_frr_conf" = "xyes" -a "x$with_frr_vtysh" = "xyes"], [
+        AC_MSG_ERROR([--with-frr-conf and --with-frr-vtysh are mutually exclusive])
 ])
 
 AS_IF([test "x$with_frr" = "xyes"], [
@@ -55,8 +66,13 @@ AS_IF([test "x$with_frr_conf" = "xyes"], [
         AC_DEFINE(HAVE_FRR_CONF, 1, [Built with FRR frr.conf file backend])
 ])
 
+AS_IF([test "x$with_frr_vtysh" = "xyes"], [
+        AC_DEFINE(HAVE_FRR_VTYSH, 1, [Built with FRR vtysh -b backend])
+])
+
 AM_CONDITIONAL(HAVE_FRR_GRPC, [test "x$with_frr" = "xyes"])
 AM_CONDITIONAL(HAVE_FRR_CONF, [test "x$with_frr_conf" = "xyes"])
+AM_CONDITIONAL(HAVE_FRR_VTYSH, [test "x$with_frr_vtysh" = "xyes"])
 
 # Check for pkg-config first
 PKG_PROG_PKG_CONFIG
@@ -89,7 +105,7 @@ cat <<EOF
   Prefix................: $prefix
   Exec prefix...........: $eprefix
   Sysconfdir............: `eval echo $sysconfdir`
-  Backend...............: $(test "x$with_frr" = "xyes" && echo "FRR gRPC" || (test "x$with_frr_conf" = "xyes" && echo "FRR frr.conf" || echo "Linux kernel"))
+  Backend...............: $(test "x$with_frr" = "xyes" && echo "FRR gRPC" || (test "x$with_frr_conf" = "xyes" && echo "FRR frr.conf" || (test "x$with_frr_vtysh" = "xyes" && echo "FRR vtysh" || echo "Linux kernel")))
   C Compiler............: $CC $CFLAGS $CPPFLAGS $LDFLAGS $LIBS
 
 ------------- Compiler version --------------

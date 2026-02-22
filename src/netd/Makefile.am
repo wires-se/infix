@@ -33,7 +33,12 @@ if HAVE_FRR_CONF
 # FRR frr.conf file backend
 netd_SOURCES       += src/frrconf_backend.c src/frrconf_backend.h
 else
+if HAVE_FRR_VTYSH
+# FRR vtysh -b backend
+netd_SOURCES       += src/vtysh_backend.c src/vtysh_backend.h
+else
 # Linux kernel backend (no FRR)
 netd_SOURCES       += src/linux_backend.c src/linux_backend.h
+endif
 endif
 endif

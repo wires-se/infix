@@ -21,6 +21,9 @@ NETD_CONF_OPTS = --prefix= --disable-silent-rules
 ifeq ($(BR2_PACKAGE_NETD_FRR_CONF),y)
 NETD_DEPENDENCIES += frr
 NETD_CONF_OPTS += --with-frr-conf
+else ifeq ($(BR2_PACKAGE_NETD_FRR_VTYSH),y)
+NETD_DEPENDENCIES += frr
+NETD_CONF_OPTS += --with-frr-vtysh
 else ifeq ($(BR2_PACKAGE_NETD_FRR),y)
 NETD_DEPENDENCIES += frr grpc host-grpc protobuf
 NETD_CONF_ENV += \

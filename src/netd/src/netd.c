@@ -7,6 +7,14 @@
 #include "netd.h"
 #include "config.h"
 
+int debug;
+
+static sig_atomic_t do_reload;
+static sig_atomic_t do_shutdown;
+
+static struct route_head active_routes = TAILQ_HEAD_INITIALIZER(active_routes);
+static struct rip_config active_rip;
+
 /* Backend selection at compile time */
 #ifdef HAVE_FRR_GRPC
 #include "grpc_backend.h"
@@ -22,6 +30,13 @@ static void backend_cleanup(void) { frrconf_backend_cleanup(); }
 static int backend_apply(struct route_head *routes, struct rip_config *rip) {
 	return frrconf_backend_apply(routes, rip);
 }
+#elif defined(HAVE_FRR_VTYSH)
+#include "vtysh_backend.h"
+static int backend_init(void)    { return vtysh_backend_init(); }
+static void backend_cleanup(void) { vtysh_backend_cleanup(); }
+static int backend_apply(struct route_head *routes, struct rip_config *rip) {
+	return vtysh_backend_apply(routes, rip);
+}
 #else
 #include "linux_backend.h"
 static int backend_init(void)    { return linux_backend_init(); }
@@ -30,14 +45,6 @@ static int backend_apply(struct route_head *routes, struct rip_config *rip) {
 	return linux_backend_apply(routes, rip);
 }
 #endif
-
-int debug;
-
-static volatile sig_atomic_t do_reload;
-static volatile sig_atomic_t do_shutdown;
-
-static struct route_head active_routes = TAILQ_HEAD_INITIALIZER(active_routes);
-static struct rip_config active_rip;
 
 static void sighup_handler(int sig)
 {

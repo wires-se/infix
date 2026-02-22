@@ -6,28 +6,42 @@ config BR2_PACKAGE_NETD
 	  Network route daemon. Manages static routes and RIP routing.
 	  Reads configuration from /etc/netd/conf.d/*.conf.
 
-	  With FRR: Full routing via gRPC (static routes, RIP, OSPF).
+	  With FRR: Full routing via gRPC, vtysh, or frr.conf.
 	  Without FRR: Standalone Linux backend via rtnetlink.
 
 	  https://github.com/kernelkit/infix
 
 if BR2_PACKAGE_NETD
 
+choice
+	prompt "FRR backend"
+	default BR2_PACKAGE_NETD_FRR_VTYSH if BR2_PACKAGE_FRR
+	default BR2_PACKAGE_NETD_LINUX
+
+config BR2_PACKAGE_NETD_FRR_VTYSH
+	bool "FRR vtysh"
+	depends on BR2_PACKAGE_FRR
+	help
+	  Enable FRR integration via vtysh -b.
+	  netd generates incremental config diffs and applies
+	  them to running FRR daemons via vtysh -b.
+
+	  FRR daemons run as standalone finit services (no watchfrr).
+	  Provides static routes and RIP support.
+
 config BR2_PACKAGE_NETD_FRR_CONF
-	bool "FRR frr.conf backend"
-	default y if BR2_PACKAGE_FRR
+	bool "FRR frr.conf"
 	depends on BR2_PACKAGE_FRR
 	help
 	  Enable FRR integration via frr.conf file generation.
 	  netd assembles a single /etc/frr/frr.conf from routing
-	  config and signals FRR to reload via frrinit.sh.
+	  config and signals FRR to reload via frrinit.sh/watchfrr.
 
 	  Provides full routing support (static routes, RIP, OSPF).
 
 config BR2_PACKAGE_NETD_FRR
-	bool "FRR gRPC backend"
+	bool "FRR gRPC"
 	depends on BR2_PACKAGE_FRR
-	depends on !BR2_PACKAGE_NETD_FRR_CONF
 	select BR2_PACKAGE_PROTOBUF
 	select BR2_PACKAGE_GRPC
 	select BR2_PACKAGE_HOST_PROTOBUF
@@ -36,7 +50,12 @@ config BR2_PACKAGE_NETD_FRR
 	  Enable FRR integration via gRPC northbound API.
 	  Provides full routing support (static routes, RIP, OSPF).
 
-	  If disabled, netd uses Linux kernel backend (rtnetlink)
-	  with static routes only.
+config BR2_PACKAGE_NETD_LINUX
+	bool "Linux kernel"
+	help
+	  Use Linux kernel backend (rtnetlink) with static routes
+	  only. No FRR dependency.
+
+endchoice
 
 endif

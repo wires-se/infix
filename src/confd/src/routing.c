@@ -539,7 +539,7 @@ int routing_change(sr_session_ctx_t *session, struct lyd_node *config, struct ly
 	ripd_enabled = fexist(RIPD_SIGNAL_NEXT);
 
 activate:
-	/* Generate complete /etc/frr/daemons */
+	/* Generate complete /etc/frr/daemons (for watchfrr/frrinit.sh) */
 	frr_daemons_write(ospfd_enabled, ripd_enabled, bfdd_enabled);
 
 	if (bfdd_enabled)
@@ -568,6 +568,14 @@ activate:
 	} else {
 		(void)remove(NETD_CONF);
 	}
+
+	/* Enable/disable FRR daemons as standalone finit services.
+	 * Harmless no-op when using watchfrr (services not installed). */
+	systemf("initctl -nbq %s ospfd", ospfd_enabled ? "enable" : "disable");
+	if (ospfd_enabled)
+		systemf("initctl -nbq touch ospfd");
+	systemf("initctl -nbq %s ripd",  ripd_enabled  ? "enable" : "disable");
+	systemf("initctl -nbq %s bfdd",  bfdd_enabled  ? "enable" : "disable");
 
 	/*
 	 * Signal netd to reload - it assembles /etc/frr/frr.conf and
