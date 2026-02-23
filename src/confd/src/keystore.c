@@ -12,8 +12,6 @@
 
 #define XPATH_KEYSTORE_ASYM "/ietf-keystore:keystore/asymmetric-keys"
 #define XPATH_KEYSTORE_SYM  "/ietf-keystore:keystore/symmetric-keys"
-#define SSH_PRIVATE_KEY  "/tmp/ssh.key"
-#define SSH_PUBLIC_KEY   "/tmp/ssh.pub"
 
 /* return file size */
 static size_t filesz(const char *fn)
@@ -91,6 +89,9 @@ static int keystore_update(sr_session_ctx_t *session, struct lyd_node *config, s
 	}
 
 	for (size_t i = 0; i < count; i++) {
+		char tmpdir[] = "/tmp/keystore.XXXXXX";
+		char priv_path[sizeof(tmpdir) + 16];
+		char pub_path[sizeof(tmpdir) + 16];
 		char *name = srx_get_str(session, "%s/name", list[i].xpath);
 		char *public_key_format, *private_key_format;
 		char *pub_key = NULL, *priv_key = NULL;
@@ -115,16 +116,24 @@ static int keystore_update(sr_session_ctx_t *session, struct lyd_node *config, s
 			continue;
 
 		NOTE("SSH key (%s) does not exist, generating...", name);
-		if (systemf("/usr/libexec/infix/mkkeys %s %s", SSH_PRIVATE_KEY, SSH_PUBLIC_KEY)) {
+
+		if (!mkdtemp(tmpdir)) {
+			ERRNO("Failed creating temp dir for SSH key generation");
+			goto next;
+		}
+		snprintf(priv_path, sizeof(priv_path), "%s/ssh.key", tmpdir);
+		snprintf(pub_path, sizeof(pub_path), "%s/ssh.pub", tmpdir);
+
+		if (systemf("/usr/libexec/infix/mkkeys %s %s", priv_path, pub_path)) {
 			ERROR("Failed generating SSH keys for %s", name);
 			goto next;
 		}
 
-		priv_key = filerd(SSH_PRIVATE_KEY, filesz(SSH_PRIVATE_KEY));
+		priv_key = filerd(priv_path, filesz(priv_path));
 		if (!priv_key)
 			goto next;
 
-		pub_key = filerd(SSH_PUBLIC_KEY, filesz(SSH_PUBLIC_KEY));
+		pub_key = filerd(pub_path, filesz(pub_path));
 		if (!pub_key)
 			goto next;
 
@@ -140,10 +149,8 @@ static int keystore_update(sr_session_ctx_t *session, struct lyd_node *config, s
 			goto next;
 		}
 	next:
-		if (erase(SSH_PRIVATE_KEY))
-			ERRNO("Failed removing SSH server private key");
-		if (erase(SSH_PUBLIC_KEY))
-			ERRNO("Failed removing SSH server public key");
+		if (rmrf(tmpdir))
+			ERRNO("Failed removing temp dir %s", tmpdir);
 
 		if (priv_key)
 			free(priv_key);

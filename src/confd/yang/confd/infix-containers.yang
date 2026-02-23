@@ -22,6 +22,11 @@ module infix-containers {
     prefix infix-sys;
   }
 
+  revision 2026-02-23 {
+    description "Input validation improvements";
+    reference "internal";
+  }
+
   revision 2025-12-09 {
     description "Add resource management:
                   - Add resource-limit container with memory and cpu configuration.
@@ -81,6 +86,17 @@ module infix-containers {
     type string {
       length "2..64";
       pattern '[a-zA-Z0-9][a-zA-Z0-9_.-]+';
+    }
+  }
+
+
+  typedef image-reference {
+    description "OCI image reference or transport URI.
+                 Allows registry references (e.g., quay.io/user/image:tag),
+                 transport prefixes (docker://, oci-archive:, dir:), and
+                 download URLs (ftp://, http://, https://).";
+    type string {
+      pattern '[a-zA-Z0-9][a-zA-Z0-9_./:@=+%~-]*';
     }
   }
 
@@ -181,7 +197,7 @@ module infix-containers {
                            container will be put on a queue that retries pull every time
                            there is a route change in the host's system.";
 	mandatory true;
-	type string;
+	type image-reference;
       }
 
       container checksum {
@@ -240,7 +256,9 @@ module infix-containers {
 
       leaf command {
 	description "Override ENTRYPOINT from image and run command + args.";
-	type string;
+	type string {
+	  pattern '[a-zA-Z0-9_./ :=@%^,+-]+';
+	}
       }
 
       leaf hostname {
@@ -298,7 +316,9 @@ module infix-containers {
                          NOTE: Some (*) options only work with masquerading container bridges,
                                which automatically create VETH pairs with one end in the host
                                bridge and the other in the container.";
-            type string;
+            type string {
+              pattern '[a-zA-Z_][a-zA-Z0-9_]*=[a-zA-Z0-9.:_/-]+';
+            }
           }
         }
 
@@ -310,7 +330,9 @@ module infix-containers {
                          Sample: 8080:80           -- forward tcp port 8080 to container port 80
                                  69:69/udp         -- forward udp port 69 to container port 69
                                  127.0.0.1:8080:80 -- forward only from loopback interface";
-          type string;
+          type string {
+            pattern '[0-9.:\[\]]+(/[a-zA-Z]+)?';
+          }
         }
 
         leaf-list dns {
@@ -464,7 +486,7 @@ module infix-containers {
                        When mounting files, directories (and globs) from the host,
                        the source must be an absolute path.";
               type string {
-                pattern '/.*';
+                pattern '/[a-zA-Z0-9_./*?-]+([ ]?[a-zA-Z0-9_./*?-]+)*';
               }
             }
           }
@@ -493,7 +515,7 @@ module infix-containers {
                        or import the text file using the 'content' node.";
           mandatory true;
           type string {
-            pattern '/.*';
+            pattern '/[a-zA-Z0-9_./-]+(/[a-zA-Z0-9_./-]+)*';
           }
         }
 
@@ -545,7 +567,7 @@ module infix-containers {
 	  description "Absolute path to target destination directory inside the container.";
 	  mandatory true;
           type string {
-            pattern '/.*';
+            pattern '/[a-zA-Z0-9_./-]+(/[a-zA-Z0-9_./-]+)*';
           }
 	}
       }
@@ -593,12 +615,12 @@ module infix-containers {
     input {
       leaf uri {
         description "The URL or local file path, e.g., /lib/oci/archive.tar.gz";
-        type string;
+        type image-reference;
         mandatory true;
       }
       leaf name {
         description "Image name[:tag], default: basename of archive dir + :latest";
-        type string;
+        type image-reference;
       }
     }
   }
