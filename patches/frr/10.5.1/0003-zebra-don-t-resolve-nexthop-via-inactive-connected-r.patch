@@ -1,0 +1,70 @@
+From daf4378dbf9d48372e2d10e825d67ba652abda87 Mon Sep 17 00:00:00 2001
+From: Joachim Wiberg <troglobit@gmail.com>
+Date: Sun, 22 Feb 2026 10:22:06 +0100
+Subject: [PATCH 3/3] zebra: don't resolve nexthop via inactive connected route
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+Organization: Wires
+
+When an interface is deleted, zebra clears NEXTHOP_FLAG_ACTIVE on the
+nexthops of any NHG that depended on that interface (via
+if_down_nhg_dependents -> zebra_nhg_check_valid -> zebra_nhg_set_valid).
+However, there is a window — and in some cases a permanent stale state —
+where the corresponding ZEBRA_ROUTE_LOCAL /32 route for the interface's
+address is still present in the RIB as dest->selected_fib for that
+prefix node, without having ROUTE_ENTRY_REMOVED set.
+
+This happens when rib_delnode() is never called for the LOCAL route,
+e.g. because connected_down() returned early (ZEBRA_IFC_DOWN already
+set from a prior call) or because process_subq_early_route_delete()
+silently dropped the deletion due to a nexthop ifindex mismatch.  The
+stale route entry then sits in the RIB with "unknown inactive" in
+"show ip route" — its nexthop's NEXTHOP_FLAG_ACTIVE is clear, but its
+ifindex still holds the original value of the now-deleted interface.
+
+When nexthop_active() resolves a static route whose gateway address
+matches the stale LOCAL /32 prefix, it finds the stale route as
+dest->selected_fib, passes the RIB_CONNECTED_ROUTE check (ZEBRA_ROUTE_LOCAL
+is included in that macro), and — crucially — copies the stale, invalid
+ifindex into the resolving nexthop before returning success.
+
+The resulting NHG is then installed into the kernel with an ifindex that
+no longer exists.  The kernel rejects the NHG install with EINVAL
+("Invalid argument"), and the subsequent route install fails with ENOENT
+("Nexthop id does not exist"), leaving the route stuck as "S>r" (selected
+but rejected).
+
+Fix this by checking NEXTHOP_FLAG_ACTIVE on the connected route's nexthop
+before copying its ifindex.  If the nexthop is inactive, fall through to
+continue_up_tree so that the lookup can try parent prefixes rather than
+using a stale interface index.
+
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+---
+ zebra/zebra_nhg.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/zebra/zebra_nhg.c b/zebra/zebra_nhg.c
+index f5f78050f1..39b61c02f8 100644
+--- a/zebra/zebra_nhg.c
++++ b/zebra/zebra_nhg.c
+@@ -2466,6 +2466,15 @@ static int nexthop_active(struct nexthop *nexthop, struct nhg_hash_entry *nhe,
+ 							    nexthop->ifindex);
+ 
+ 			newhop = match->nhe->nhg.nexthop;
++			/*
++			 * If the connected route's nexthop is inactive
++			 * (e.g. the interface was deleted but the LOCAL route
++			 * hasn't been cleaned up from the RIB yet), do not
++			 * copy its stale ifindex.  Treat it as unresolvable
++			 * and continue up the trie instead.
++			 */
++			if (!CHECK_FLAG(newhop->flags, NEXTHOP_FLAG_ACTIVE))
++				goto continue_up_tree;
+ 			if (nexthop->type == NEXTHOP_TYPE_IPV4) {
+ 				nexthop->ifindex = newhop->ifindex;
+ 				nexthop->type = NEXTHOP_TYPE_IPV4_IFINDEX;
+-- 
+2.43.0
+
