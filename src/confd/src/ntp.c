@@ -35,18 +35,11 @@ static int change(sr_session_ctx_t *session, struct lyd_node *config, struct lyd
 		return SR_ERR_OK;
 
 	case SR_EV_DONE:
-		/* Check if NTP container exists (presence container) */
-		if (!lydx_get_xpathf(config, XPATH_NTP_)) {
-			DEBUG("NTP server disabled, removing config");
-			systemf("rm -f %s", NTP_CONF);
-
+		/* Check if passed validation in previous event */
+		if (!fexist(NTP_NEXT)) {
+			(void)remove(NTP_CONF);
 			return SR_ERR_OK;
 		}
-
-		/* Check if passed validation in previous event */
-		if (!fexist(NTP_NEXT))
-			return SR_ERR_OK;
-
 		(void)remove(NTP_PREV);
 		(void)rename(NTP_CONF, NTP_PREV);
 		(void)rename(NTP_NEXT, NTP_CONF);
