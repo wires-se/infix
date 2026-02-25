@@ -178,6 +178,8 @@ with infamy.Test() as test:
                         }
                     }
                 })
+                print("Waiting for static route ...")
+                until(lambda: route.ipv4_route_exist(R1, "0.0.0.0/0", proto="ietf-routing:static", pref=1), attempts=200)
 
             with test.step("Verify connectivity from PC:data12 to R2:lo via static route"):
                 ns0.must_reach("192.168.200.1")

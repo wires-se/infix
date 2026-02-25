@@ -4,9 +4,13 @@ ifdef::topdoc[:imagesdir: {topdoc}../../test/case/interfaces/igmp_basic]
 
 ==== Description
 
-Verify that all multicast get flooded when no IGMP join exists in the system and
-the flooding stops as soon a join arrives
+Verify basic IGMP snooping behavior on a bridge.  Without any IGMP
+membership, multicast should be flooded to all ports.  Once a host
+joins a group, the bridge should learn the membership via IGMP and
+only forward matching multicast to the member port, pruning it from
+non-member ports.
 
+....
               .1
  .---------------------------.
  |            DUT            |
@@ -19,6 +23,13 @@ the flooding stops as soon a join arrives
  '-------' '-------' '-------'
     .2         .3        .4
              HOST
+....
+
+A multicast sender on `msend` sends to group 224.1.1.1.  First, with
+no IGMP joins, verify the group is flooded to both `mrecv` and `!memb`.
+Then `mrecv` joins the group and the test waits for the bridge MDB to
+reflect the membership before verifying that `!memb` no longer receives
+the group.
 
 ==== Topology
 

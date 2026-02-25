@@ -28,7 +28,7 @@ with infamy.Test() as test:
         left = env.attach("left", "mgmt")
         right = env.attach("right", "mgmt")
 
-    with test.step("Configure DUTs with tunnel {tunnel}"):
+    with test.step(f"Configure DUTs with tunnel {tunnel}"):
         container_left4 = {
             "local": "192.168.50.1",
             "remote": "192.168.50.2"

@@ -6,6 +6,7 @@ Verify IPv6 autoconf on a bridge is properly set up for global prefix.
 See issue #473 for details.
 """
 import infamy
+from infamy.util import until
 
 with infamy.Test() as test:
     with test.step("Set up topology and attach to target DUT"):
@@ -42,9 +43,9 @@ with infamy.Test() as test:
         })
 
     with test.step("Verify using sysctl that 'net.ipv6.conf.br0.autoconf' is 1 on target"):
-        out = tgtssh.runsh("sysctl net.ipv6.conf.br0.autoconf").stdout
-        print(out)
-        if "autoconf = 1" not in out:
-            test.fail()
+        def check_autoconf():
+            out = tgtssh.runsh("sysctl net.ipv6.conf.br0.autoconf").stdout
+            return "autoconf = 1" in out
+        until(check_autoconf, attempts=10)
 
     test.succeed()
