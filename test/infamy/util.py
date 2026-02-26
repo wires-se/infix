@@ -38,13 +38,20 @@ def parallel(*fns):
 
 
 def until(fn, attempts=10, interval=1):
+    last_exc = None
     for attempt in range(attempts):
-        result = fn()
+        try:
+            result = fn()
+        except Exception as e:
+            last_exc = e
+            result = False
         if result:
             return result
 
         time.sleep(interval)
 
+    if last_exc:
+        raise last_exc
     raise Exception("Expected condition did not materialize")
 
 
