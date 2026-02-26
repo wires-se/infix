@@ -24,7 +24,7 @@ NETD_CONF_OPTS += --with-frr-conf
 else ifeq ($(BR2_PACKAGE_NETD_FRR_VTYSH),y)
 NETD_DEPENDENCIES += frr
 NETD_CONF_OPTS += --with-frr-vtysh
-else ifeq ($(BR2_PACKAGE_NETD_FRR),y)
+else ifeq ($(BR2_PACKAGE_NETD_FRR_GRPC),y)
 NETD_DEPENDENCIES += frr grpc host-grpc protobuf
 NETD_CONF_ENV += \
 	PROTOC="$(HOST_DIR)/bin/protoc" \
