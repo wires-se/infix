@@ -57,7 +57,7 @@ ADD docker/yang /root/yang
 RUN ~/init-venv.sh ~/pip-requirements.txt
 
 # Download container images for upgrade testing
-COPY case/infix_containers/upgrade/download.sh /tmp/download.sh
+COPY case/containers/upgrade/download.sh /tmp/download.sh
 RUN /tmp/download.sh /srv && rm /tmp/download.sh
 
 COPY docker/entrypoint.sh /entrypoint.sh
