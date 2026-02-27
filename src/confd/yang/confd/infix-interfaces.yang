@@ -204,6 +204,7 @@ module infix-interfaces {
     deviate replace {
       type string {
         length "0..64";
+        pattern '[^\p{Cc}]*';
       }
     }
   }

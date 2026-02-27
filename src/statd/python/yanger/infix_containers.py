@@ -48,7 +48,7 @@ def network(ps, inspect):
                 if port["host_ip"]:
                     addr = f"{port['host_ip']}:"
 
-                pub = f"{addr}{port['host_port']}->{port['container_port']}/{port['protocol']}"
+                pub = f"{addr}{port['host_port']}:{port['container_port']}/{port['protocol']}"
                 net["publish"].append(pub)
 
     return net

@@ -1,13 +1,17 @@
 From 78d62382bf9d665764844a0f686b27e42d73bea9 Mon Sep 17 00:00:00 2001
 From: Joachim Wiberg <troglobit@gmail.com>
 Date: Wed, 7 Jan 2026 18:09:32 +0100
-Subject: [PATCH 9/9] sr_mkfifo(): set sysrepo group if available
+Subject: [PATCH 09/10] sr_mkfifo(): set sysrepo group if available
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Organization: Wires
 
 We already set the umask, set the group to allow users of the sysrepo
 group to initiate events.
 
 Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+Signed-off-by: Mattias Walström <lazzer@gmail.com>
 ---
  src/common.c | 12 ++++++++++++
  1 file changed, 12 insertions(+)

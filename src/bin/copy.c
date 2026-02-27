@@ -163,6 +163,76 @@ static bool is_uri(const char *str)
 	return strstr(str, "://") != NULL;
 }
 
+static bool is_ssh_uri(const char *uri)
+{
+	return !strncmp(uri, "scp://", 6) || !strncmp(uri, "sftp://", 7);
+}
+
+/*
+ * Parse scp:// or sftp:// URI into an scp(1)-compatible remote string
+ * of the form [user@]host:path, and optionally extract the port.
+ *
+ * URI format: scheme://[user@]host[:port]/path
+ *
+ * Returns a heap-allocated string the caller must free, and sets *portp
+ * to a heap-allocated port string (or NULL) the caller must also free.
+ * Returns NULL on parse failure.
+ */
+static char *ssh_uri_to_remote(const char *uri, char **portp)
+{
+	const char *p, *slash, *path;
+	char auth[256], *auth_at, *auth_colon, *host_start;
+	char *user, *remote = NULL, *port = NULL;
+	size_t auth_len;
+
+	*portp = NULL;
+
+	if (!strncmp(uri, "scp://", 6))
+		p = uri + 6;
+	else if (!strncmp(uri, "sftp://", 7))
+		p = uri + 7;
+	else
+		return NULL;
+
+	slash = strchr(p, '/');
+	if (!slash)
+		slash = p + strlen(p);
+
+	auth_len = (size_t)(slash - p);
+	if (auth_len >= sizeof(auth))
+		return NULL;
+	memcpy(auth, p, auth_len);
+	auth[auth_len] = '\0';
+
+	auth_at = strchr(auth, '@');
+	if (auth_at) {
+		*auth_at = '\0';
+		user = auth;
+		host_start = auth_at + 1;
+	} else {
+		user = (char *)remote_user; /* may be NULL */
+		host_start = auth;
+	}
+
+	auth_colon = strchr(host_start, ':');
+	if (auth_colon) {
+		*auth_colon = '\0';
+		port = strdup(auth_colon + 1);
+		if (!port)
+			return NULL;
+	}
+
+	path = *slash ? slash : "/";
+
+	if (user)
+		(void)asprintf(&remote, "%s@%s:%s", user, host_start, path);
+	else
+		(void)asprintf(&remote, "%s:%s", host_start, path);
+
+	*portp = port;
+	return remote;
+}
+
 static bool is_stdout(const char *path)
 {
 	if (!path)
@@ -394,29 +464,37 @@ static int subprocess(char * const *argv)
 
 static int curl(char *op, const char *path, const char *uri)
 {
-	char *argv[] =  {
-		"curl", "-L", op, NULL, NULL, NULL, NULL, NULL,
-	};
-	int err = 1;
+	char *argv[10] = { "curl", "-L", NULL };
+	int err = 1, i = 2;
+	int path_i, uri_i, user_i = 0;
 
-	argv[3] = strdup(path);
-	argv[4] = strdup(uri);
-	if (!(argv[3] && argv[4]))
+	argv[i++] = op;
+
+	path_i = i;
+	argv[i] = strdup(path);
+	if (!argv[i++])
+		goto out;
+
+	uri_i = i;
+	argv[i] = strdup(uri);
+	if (!argv[i++])
 		goto out;
 
 	if (remote_user) {
-		argv[5] = strdup("-u");
-		argv[6] = strdup(remote_user);
-		if (!(argv[5] && argv[6]))
+		argv[i++] = "-u";
+		user_i = i;
+		argv[i] = strdup(remote_user);
+		if (!argv[i++])
 			goto out;
 	}
+
 	err = subprocess(argv);
 
 out:
-	free(argv[6]);
-	free(argv[5]);
-	free(argv[4]);
-	free(argv[3]);
+	free(argv[path_i]);
+	free(argv[uri_i]);
+	if (user_i)
+		free(argv[user_i]);
 	return err;
 }
 
@@ -443,6 +521,72 @@ static int curl_download(const char *uri, const char *dstpath)
 	}
 
 	return 0;
+}
+
+static int scp_upload(const char *srcpath, const char *uri)
+{
+	char *argv[12] = { "scp", "-o", "StrictHostKeyChecking=no", NULL };
+	int i = 3, err = 1;
+	char *remote = NULL, *port = NULL, *src_dup = NULL;
+
+	remote = ssh_uri_to_remote(uri, &port);
+	if (!remote) {
+		warnx("failed to parse URI: %s", uri);
+		goto out;
+	}
+
+	if (port) {
+		argv[i++] = "-P";
+		argv[i++] = port;
+	}
+
+	src_dup = strdup(srcpath);
+	if (!src_dup)
+		goto out;
+	argv[i++] = src_dup;
+	argv[i++] = remote;
+
+	err = subprocess(argv);
+	if (err)
+		warnx("upload to %s failed", uri);
+out:
+	free(src_dup);
+	free(port);
+	free(remote);
+	return err;
+}
+
+static int scp_download(const char *uri, const char *dstpath)
+{
+	char *argv[12] = { "scp", "-o", "StrictHostKeyChecking=no", NULL };
+	int i = 3, err = 1;
+	char *remote = NULL, *port = NULL, *dst_dup = NULL;
+
+	remote = ssh_uri_to_remote(uri, &port);
+	if (!remote) {
+		warnx("failed to parse URI: %s", uri);
+		goto out;
+	}
+
+	if (port) {
+		argv[i++] = "-P";
+		argv[i++] = port;
+	}
+
+	argv[i++] = remote;
+	dst_dup = strdup(dstpath);
+	if (!dst_dup)
+		goto out;
+	argv[i++] = dst_dup;
+
+	err = subprocess(argv);
+	if (err)
+		warnx("download of %s failed", uri);
+out:
+	free(dst_dup);
+	free(port);
+	free(remote);
+	return err;
 }
 
 static int cat(const char *srcpath)
@@ -492,6 +636,8 @@ static int put(const char *srcpath, const char *dst,
 		err = sysrepo_import(ds, srcpath);
 	else if (is_stdout(dst))
 		err = cat(srcpath);
+	else if (is_ssh_uri(dst))
+		err = scp_upload(srcpath, dst);
 	else if (is_uri(dst))
 		err = curl_upload(srcpath, dst);
 
@@ -513,6 +659,8 @@ static int get(const char *src, const struct infix_ds *ds, const char *path)
 
 	if (ds)
 		err = sysrepo_export(ds, path);
+	else if (is_ssh_uri(src))
+		err = scp_download(src, path);
 	else if (is_uri(src))
 		err = curl_download(src, path);
 
@@ -581,6 +729,7 @@ static int copy(const char *src, const char *dst)
 {
 	const struct infix_ds *srcds = NULL, *dstds = NULL;
 	char *srcpath = NULL, *dstpath = NULL;
+	char *dst_uri = NULL;
 	bool rmsrc = false;
 	mode_t oldmask;
 	int err = 1;
@@ -596,6 +745,32 @@ static int copy(const char *src, const char *dst)
 	err = resolve_src(&src, &srcds, &srcpath, &rmsrc);
 	if (err)
 		goto err;
+
+	/*
+	 * When uploading to an SSH URI ending in '/', scp(1) would use the
+	 * basename of the local (temp) file as the remote name.  Append a
+	 * meaningful name instead: the datastore's on-disk filename, or the
+	 * source file's own basename.
+	 */
+	if (is_ssh_uri(dst) && dst[strlen(dst) - 1] == '/') {
+		const char *bn, *slash;
+
+		if (srcds && srcds->path) {
+			slash = strrchr(srcds->path, '/');
+			bn = slash ? slash + 1 : srcds->path;
+		} else if (srcds) {
+			bn = srcds->name;
+		} else {
+			slash = strrchr(srcpath, '/');
+			bn = slash ? slash + 1 : srcpath;
+		}
+
+		if (asprintf(&dst_uri, "%s%s", dst, bn) < 0) {
+			err = 1;
+			goto err;
+		}
+		dst = dst_uri;
+	}
 
 	err = resolve_dst(&dst, &dstds, &dstpath);
 	if (err)
@@ -614,6 +789,7 @@ err:
 	if (rmsrc)
 		rmtmp(srcpath);
 
+	free(dst_uri);
 	if (dstpath)
 		free(dstpath);
 	free(srcpath);

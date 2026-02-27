@@ -1,7 +1,10 @@
 From 11b9938206cf2bafc456bb22e14c7f85a604760c Mon Sep 17 00:00:00 2001
 From: Joachim Wiberg <troglobit@gmail.com>
 Date: Tue, 7 May 2024 15:41:53 +0200
-Subject: [PATCH 2/9] Allow SR_EV_DONE to return any error to sysrepocfg
+Subject: [PATCH 02/10] Allow SR_EV_DONE to return any error to sysrepocfg
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Organization: Wires
 
 Importing a system configuration with sysrepocfg the model callbacks do
@@ -17,6 +20,7 @@ This patch is a clumsy way of forcing the (first) error to bubble up to
 the surface and cause a non-zero exit code from sysrepocfg.
 
 Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+Signed-off-by: Mattias Walström <lazzer@gmail.com>
 ---
  src/shm_sub.c | 40 +++++++++++++++++++++++++++++++---------
  src/shm_sub.h |  2 +-

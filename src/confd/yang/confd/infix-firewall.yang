@@ -201,7 +201,9 @@ module infix-firewall {
 
       leaf description {
         description "Free-form description of the zone.";
-        type string;
+        type string {
+          pattern '[^\p{Cc}<>&]*';
+        }
       }
 
       leaf-list interface {
@@ -304,7 +306,9 @@ module infix-firewall {
 
       leaf description {
         description "Free-form description of this policy's purpose and scope.";
-        type string;
+        type string {
+          pattern '[^\p{Cc}<>&]*';
+        }
       }
 
       leaf-list ingress {
@@ -421,7 +425,9 @@ module infix-firewall {
 
       leaf description {
         description "Free-form description of the service.";
-        type string;
+        type string {
+          pattern '[^\p{Cc}<>&]*';
+        }
       }
 
       list port {

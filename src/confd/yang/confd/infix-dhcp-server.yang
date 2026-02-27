@@ -113,7 +113,9 @@ module infix-dhcp-server {
         case default-opt {
           leaf string {
             description "Generic string value.";
-            type string;
+            type string {
+              pattern '[^\p{Cc}]*';
+            }
           }
         }
       }
@@ -150,7 +152,9 @@ module infix-dhcp-server {
 
       leaf description {
         description "Additional information about this subnet (e.g., purpose, location, or notes).";
-        type string;
+        type string {
+          pattern '[^\p{Cc}]*';
+        }
       }
 
       leaf enabled {
@@ -206,7 +210,9 @@ module infix-dhcp-server {
 
         leaf description {
           description "Additional information about this entry, e.g., owner's name, equipment details, or location.";
-          type string;
+          type string {
+            pattern '[^\p{Cc}]*';
+          }
         }
 
         container match {
