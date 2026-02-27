@@ -38,13 +38,20 @@ def parallel(*fns):
 
 
 def until(fn, attempts=10, interval=1):
+    last_exc = None
     for attempt in range(attempts):
-        result = fn()
+        try:
+            result = fn()
+        except Exception as e:
+            last_exc = e
+            result = False
         if result:
             return result
 
         time.sleep(interval)
 
+    if last_exc:
+        raise last_exc
     raise Exception("Expected condition did not materialize")
 
 
@@ -116,7 +123,7 @@ def curl(url, timeout=10, silent=False):
     try:
         with urllib.request.urlopen(url, timeout=timeout) as response:
             return response.read().decode('utf-8', errors='replace')
-    except (urllib.error.URLError, ConnectionResetError, UnicodeEncodeError) as e:
+    except (urllib.error.URLError, ConnectionResetError, UnicodeEncodeError, TimeoutError) as e:
         if not silent:
             print(f"[WARN] curl: failed to fetch {url}: {e}")
         return ""
