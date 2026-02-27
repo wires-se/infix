@@ -1,4 +1,4 @@
-name: Build
+name: unit-test
 
 on:
   workflow_dispatch:
@@ -62,15 +62,13 @@ env:
   INFIX_BRANCH: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.infix_branch || inputs.infix_branch }}
 
 jobs:
-  build:
+  unit-tests:
     name: Build ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.name || inputs.name }} ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.target || inputs.target }}
     runs-on: [ self-hosted, latest ]
     env:
       PARALLEL: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.parallel == 'true' || github.event_name != 'workflow_dispatch' && inputs.parallel == true }}
     strategy:
       fail-fast: false
-    outputs:
-      build_id: ${{ steps.vars.outputs.INFIX_BUILD_ID }}
     steps:
       - name: Cleanup Build Folder
         run: |
@@ -100,26 +98,6 @@ jobs:
           chmod +x ./pre-build.sh
           bash ./pre-build.sh
 
-      - name: Set Build Variables
-        id: vars
-        run: |
-          if [ -n "${{ github.event.pull_request.head.sha }}" ]; then
-              # Since PRs are built from an internally generated merge
-              # commit, reverse lookups of PRs and/or commits from
-              # image version information are cumbersome.  Therefore:
-              # explicitly set a build id that references both the PR
-              # and the commit.
-              printf "INFIX_BUILD_ID=pr%d.%.7s\n" \
-                  "${{ github.event.number }}" "${{ github.event.pull_request.head.sha }}" \
-                  | tee -a $GITHUB_OUTPUT $GITHUB_ENV
-          fi
-
-          target=${{ env.TARGET }}
-          name=${{ env.NAME }}
-          echo "dir=${name}-${target}"        >> $GITHUB_OUTPUT
-          echo "tgz=${name}-${target}.tar.gz" >> $GITHUB_OUTPUT
-          echo "Building target ${target}_defconfig"
-
       - uses: ./.github/actions/cache-restore
         with:
           target: ${{ env.TARGET }}
@@ -133,52 +111,6 @@ jobs:
           podman rm -af || true
           pkill -9 -f rootlessport || true
 
-      - name: Prepare parallel build
-        id: parallel
+      - name: Unit Test ${{ env.TARGET }}
         run: |
-
-          if [ "$PARALLEL" == "true" ]; then
-             echo "BR2_PER_PACKAGE_DIRECTORIES=y" >> output/.config
-             MAKE="make -j$((`getconf _NPROCESSORS_ONLN` / 2 + 2))"
-             echo "Building in parallel with -j$((`getconf _NPROCESSORS_ONLN` / 2 + 2))"
-          else
-             echo "Disabling parallel build"
-             MAKE="make"
-          fi
-          echo "MAKE=$MAKE" >> $GITHUB_OUTPUT
-
-      - name: Build ${{ env.TARGET }}
-        run: |
-          echo "Building ${{ env.TARGET }}_defconfig ..."
-          eval "${{ steps.parallel.outputs.MAKE }}"
-
-      - name:  Check SBOM from Build
-        run: |
-          make legal-info
-
-      - name: Build test specification
-        run: |
-          make test-spec
-
-      - name: Resulting size of build
-        run: |
-          printf "Size of complete tree : "
-          du -sh .
-          printf "Size of output/       : "
-          du -sh output
-          printf "Size of dl/           : "
-          du -sh dl
-          printf "Size of output/images/: "
-          ls -l output/images/
-
-      - name: Prepare ${{ env.TARGET }} Artifact
-        run: |
-          cd output/
-          mv images ${{ steps.vars.outputs.dir }}
-          ln -s ${{ steps.vars.outputs.dir }} images
-          tar cfz ${{ steps.vars.outputs.tgz }} ${{ steps.vars.outputs.dir }}
-
-      - uses: actions/upload-artifact@v4
-        with:
-          path: output/${{ steps.vars.outputs.tgz }}
-          name: artifact-${{ env.TARGET }}
+          make test-unit

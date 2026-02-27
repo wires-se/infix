@@ -50,23 +50,29 @@ jobs:
             echo "aarch64_target=aarch64" >> $GITHUB_OUTPUT
             echo "arm_target=arm" >> $GITHUB_OUTPUT
           fi
+  unit-test:
+    needs: check-trigger
+    uses: ./.github/workflows/unit-test.yml
+    with:
+      name: "infix"
+      target: ${{ needs.check-trigger.outputs.x86_64_target }}
 
   build-x86_64:
-    needs: check-trigger
+    needs: [check-trigger, unit-test]
     uses: ./.github/workflows/build.yml
     with:
       name: "infix"
       target: ${{ needs.check-trigger.outputs.x86_64_target }}
 
   build-aarch64:
-    needs: check-trigger
+    needs: [check-trigger, unit-test]
     uses: ./.github/workflows/build.yml
     with:
       name: "infix"
       target: ${{ needs.check-trigger.outputs.aarch64_target }}
 
   build-arm:
-    needs: check-trigger
+    needs: [check-trigger, unit-test]
     uses: ./.github/workflows/build.yml
     with:
       name: "infix"
