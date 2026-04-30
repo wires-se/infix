@@ -43,6 +43,11 @@ on:
         type: string
         default: ''
         description: 'Optional script to run after checkout (for spin customization)'
+      release:
+        required: false
+        type: string
+        default: ''
+        description: 'Release version (e.g. v26.04.0), sets INFIX_RELEASE so make test finds versioned artifacts'
     secrets:
       CHECKOUT_TOKEN:
         required: false
@@ -112,6 +117,8 @@ jobs:
           ln -s "${tarfile%.tar.gz}" images
 
       - name: Regression Test ${{ env.TARGET }}
+        env:
+          INFIX_RELEASE: ${{ inputs.release }}
         run: |
           if [ -n "$NINEPM_CONF" ]; then
             export NINEPM_PROJ_CONFIG="${GITHUB_WORKSPACE}/$NINEPM_CONF"

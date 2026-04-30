@@ -41,11 +41,12 @@ jobs:
       use_cache: true
 
   test:
-    needs: build
+    needs: [build, set-version]
     uses: ./.github/workflows/test.yml
     with:
       target: x86_64
       name: infix
+      release: ${{ needs.set-version.outputs.version }}
 
   release:
     name: Release Infix ${{ github.ref_name }}
