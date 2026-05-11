@@ -295,11 +295,18 @@ int netdag_gen_ip_neighs(struct dagger *net, FILE *ip, const char *proto,
 	int err = 0;
 
 	if (!ipconf || !lydx_is_enabled(ipconf, "enabled")) {
-		FILE *fp = dagger_fopen_net_exit(net, ifname, NETDAG_EXIT_PRE, "flush-neigh.sh");
+		FILE *fp;
+
+		/* Skip if interface is currently in another netns (container) see #1493 */
+		if (!if_nametoindex(ifname))
+			return 0;
+
+		fp = dagger_fopen_net_exit(net, ifname, NETDAG_EXIT_PRE, "flush-neigh.sh");
 		if (fp) {
 			fprintf(fp, "ip -%c neigh flush dev %s nud permanent\n", proto[3], ifname);
 			fclose(fp);
 		}
+
 		return 0;
 	}
 
@@ -323,15 +330,18 @@ int netdag_gen_ip_addrs(struct dagger *net, FILE *ip, const char *proto,
 	const char *ifname = lydx_get_cattr(dif, "name");
 
 	if (!ipconf || !lydx_is_enabled(ipconf, "enabled")) {
-		if (!cni_find(ifname) && if_nametoindex(ifname)) {
-			FILE *fp;
+		FILE *fp;
 
-			fp = dagger_fopen_net_exit(net, ifname, NETDAG_EXIT_PRE, "flush.sh");
-			if (fp) {
-				fprintf(fp, "ip -%c addr flush dev %s\n", proto[3], ifname);
-				fclose(fp);
-			}
+		/* Skip if interface is currently in another netns (container) see #1493 */
+		if (!if_nametoindex(ifname))
+			return 0;
+
+		fp = dagger_fopen_net_exit(net, ifname, NETDAG_EXIT_PRE, "flush.sh");
+		if (fp) {
+			fprintf(fp, "ip -%c addr flush dev %s\n", proto[3], ifname);
+			fclose(fp);
 		}
+
 		return 0;
 	}
 

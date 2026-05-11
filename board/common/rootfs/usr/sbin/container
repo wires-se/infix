@@ -652,7 +652,9 @@ wrap()
 
     if [ "$cmd" = "stop" ]; then
 	# The setup phase may run forever in the background trying to fetch
-	# the image.  It saves its PID in /run/containers/${name}.pid
+	# the image.  It saves its PID in /run/containers/${name}.pid.  Kill
+	# any in-flight setup, then fall through to podman stop -- a stale
+	# pidfile is not proof the container isn't running.
 	if [ -f "$pidfile" ]; then
             pid=$(cat "$pidfile")
 
@@ -663,10 +665,9 @@ wrap()
             fi
 
             rm -f "$pidfile"
-            return 0
 	fi
 
-	# Only the 'podman stop' command takes -i and --timeout
+	# Only the 'podman stop' command takes -i (ignore missing) and --timeout
 	args="-i --timeout $timeout"
     fi
 
