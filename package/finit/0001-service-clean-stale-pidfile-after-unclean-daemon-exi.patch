@@ -1,0 +1,86 @@
+From 4a53f610cd05c2aba3da770384460f7e66488ff5 Mon Sep 17 00:00:00 2001
+From: Joachim Wiberg <troglobit@gmail.com>
+Date: Mon, 11 May 2026 13:55:11 +0200
+Subject: [PATCH 1/2] service: clean stale pidfile after unclean daemon exit
+Organization: Wires
+
+With `pid:!/path` Finit does not manage the file -- the daemon
+creates it on start and removes it on graceful exit.  If the daemon
+dies before cleanup (SIGKILL, OOM, segfault, exit during startup)
+the file lingers and can block the next instance from starting,
+e.g. dbus-daemon refuses with EEXIST and the restart loop fails.
+
+Remove the file when it still names the just-reaped PID and that
+PID is no longer alive (the liveness check guards against reuse).
+Called from service_cleanup(), and from service_monitor()'s
+forking+starting branch where cleanup was previously skipped.
+
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+---
+ src/service.c | 36 +++++++++++++++++++++++++++++++++++-
+ 1 file changed, 35 insertions(+), 1 deletion(-)
+
+diff --git a/src/service.c b/src/service.c
+index 7ed4fceb..e930c4fd 100644
+--- a/src/service.c
++++ b/src/service.c
+@@ -1120,6 +1120,35 @@ static void service_notify_stop(svc_t *svc)
+ 	}
+ }
+ 
++/*
++ * Drop a daemon-owned (pid:!) pidfile if it still names the just-reaped
++ * PID and that PID is gone.  The liveness check guards against reuse.
++ */
++static void service_clean_pidfile(svc_t *svc, pid_t reaped)
++{
++	pid_t pid;
++	char *fn;
++
++	if (reaped <= 1)
++		return;
++
++	fn = pid_file(svc);
++	if (!fn)
++		return;
++
++	pid = pid_file_read(fn);
++	if (pid != reaped || pid_alive(pid))
++		return;
++
++	if (remove(fn) && errno != ENOENT) {
++		logit(LOG_CRIT, "Failed removing stale service %s pidfile %s",
++		      svc_ident(svc, NULL, 0), fn);
++		return;
++	}
++
++	dbg("Removed stale service %s pidfile %s", svc_ident(svc, NULL, 0), fn);
++}
++
+ /*
+  * Clean up any lingering state from dead/killed services
+  */
+@@ -1137,6 +1166,8 @@ static void service_cleanup(svc_t *svc)
+ 		if (remove(fn) && errno != ENOENT)
+ 			logit(LOG_CRIT, "Failed removing service %s pidfile %s",
+ 			      svc_ident(svc, NULL, 0), fn);
++	} else if (svc->pidfile[0] == '!') {
++		service_clean_pidfile(svc, svc->pid);
+ 	}
+ 
+ 	/*
+@@ -2405,7 +2436,10 @@ void service_monitor(pid_t lost, int status)
+ 	if (svc_is_forking(svc)) {
+ 		/* Likely start script exiting */
+ 		if (svc_is_starting(svc)) {
+-			svc->pid = 0;	/* Expect no more activity from this one */
++			/* Daemon died before clearing 'starting'; drop any stale pidfile. */
++			service_clean_pidfile(svc, lost);
++			svc->oldpid = lost;	/* So service_retry() logs the real PID */
++			svc->pid = 0;		/* Expect no more activity from this one */
+ 			goto cont;
+ 		}
+ 
+-- 
+2.43.0
+
