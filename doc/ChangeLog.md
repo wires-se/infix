@@ -3,6 +3,21 @@ Change Log
 
 All notable changes to the project are documented in this file.
 
+[v26.05.0][UNRELEASED]
+-------------------------
+
+### Changes
+
+- Upgrade Linux kernel to 6.18.29 (LTS)
+
+### Fixes
+
+- Fix #1493: container with a physical interface not properly removed
+  when switching to a configuration without containers
+- Handle unclean daemon exits better, e.g., `dbus-daemon` crashing and
+  leaving a stale pidfile behind, causing it to refuse to be restarted
+- Fix occasional blank or garbled `[ OK ]` lines at startup
+
 [v26.04.0][] - 2026-04-30
 -------------------------
 

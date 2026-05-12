@@ -1,0 +1,50 @@
+From 30f2ca3b2e64bce7db1e2d9dcb37a06d53e0b6bf Mon Sep 17 00:00:00 2001
+From: Joachim Wiberg <troglobit@gmail.com>
+Date: Mon, 11 May 2026 17:08:25 +0200
+Subject: [PATCH 2/2] service: log signal name and core dumps in death message
+Organization: Wires
+
+Replace the bare signal number ("by signal: 9") with the symbolic
+name ("killed by SIGKILL") and annotate when the kernel wrote a
+core:("killed by SIGSEGV, core dumped").  Makes the restart line
+self-explanatory and gives operators a strong breadcrumb when a
+daemon dies unexpectedly.
+
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+---
+ src/service.c | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
+
+diff --git a/src/service.c b/src/service.c
+index e930c4fd..127e0099 100644
+--- a/src/service.c
++++ b/src/service.c
+@@ -2828,13 +2828,18 @@ static void service_retry(svc_t *svc)
+ 	timeout = ((*restart_cnt) <= (svc->restart_max / 2)) ? 2000 : 5000;
+ 	/* If a longer timeout was specified in the conf, use that instead. */
+ 	svc->restart_tmo = max(svc->restart_tmo, timeout);
+-	logit(LOG_CONSOLE|LOG_WARNING, "Service %s[%d] died (%s%d), restarting (retry in %d msec) (attempt: %d/%d)",
+-	      svc_ident(svc, NULL, 0), svc->oldpid,
+-	      WIFEXITED(svc->status) ? "with exit status: " : "by signal: ",
+-	      WIFEXITED(svc->status) ? WEXITSTATUS(svc->status) : WTERMSIG(svc->status),
+-	      svc->restart_tmo,
+-	      *restart_cnt,
+-	      svc->restart_max);
++	if (WIFEXITED(svc->status))
++		logit(LOG_CONSOLE|LOG_WARNING,
++		      "Service %s[%d] died (exit status: %d), restarting (retry in %d msec) (attempt: %d/%d)",
++		      svc_ident(svc, NULL, 0), svc->oldpid, WEXITSTATUS(svc->status),
++		      svc->restart_tmo, *restart_cnt, svc->restart_max);
++	else
++		logit(LOG_CONSOLE|LOG_WARNING,
++		      "Service %s[%d] died (killed by %s%s), restarting (retry in %d msec) (attempt: %d/%d)",
++		      svc_ident(svc, NULL, 0), svc->oldpid,
++		      sig_name(WTERMSIG(svc->status)),
++		      WCOREDUMP(svc->status) ? ", core dumped" : "",
++		      svc->restart_tmo, *restart_cnt, svc->restart_max);
+ 
+ 	svc_unblock(svc);
+ 	service_step(svc);
+-- 
+2.43.0
+

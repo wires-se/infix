@@ -74,27 +74,38 @@ struct plugin {
 };
 
 static sig_atomic_t pump_running = 1;
-static int restart;   /* set when sentinel found; suppresses conout() */
+static int restart;   /* set when sentinel found; suppresses progress output */
 int debug = 0;
 
 
-/* Finit style progress output on console */
+/*
+ * Finit-style progress output.  conout(3, "fmt", ...) marks a step pending
+ * and caches the description; conout(0/1/2, NULL) finalises with OK/FAIL/
+ * WARN, reprinting the cached description so the line survives intervening
+ * stderr writes (sysrepo logs, NOTE/ERROR, ...).
+ */
 static void conout(int rc, const char *fmt, ...)
 {
-	const char *sta = "%s\e[1m[\e[1;%dm%s\e[0m\e[1m]\e[0m %s";
 	const char *msg[] = { " OK ", "FAIL", "WARN", " ⋯  " };
-	const char *cr = rc == 3 ? "" : "\r";
-	const int col[] = { 32, 31, 33, 33 };
-	char buf[80];
-	va_list ap;
+	const int   col[] = { 32, 31, 33, 33 };
+	static char desc[80];
 
 	if (restart)
 		return;
 
-	snprintf(buf, sizeof(buf), sta, cr, col[rc], msg[rc], fmt);
-	va_start(ap, fmt);
-	vfprintf(stderr, buf, ap);
-	va_end(ap);
+	if (fmt) {
+		va_list ap;
+
+		va_start(ap, fmt);
+		vsnprintf(desc, sizeof(desc), fmt, ap);
+		va_end(ap);
+	}
+
+	fprintf(stderr, "\r\e[K\e[1m[\e[1;%dm%s\e[0m\e[1m]\e[0m %s%s",
+		col[rc], msg[rc], desc, rc == 3 ? "" : "\n");
+
+	if (rc != 3)
+		desc[0] = '\0';
 }
 
 static void version_print(void)
@@ -527,7 +538,7 @@ static void maybe_enable_test_mode(void)
 
 		conout(3, "Enabling test mode");
 		rc = systemf("sysrepoctl -c infix-test -e test-mode-enable");
-		conout(rc ? 1 : 0, "\n");
+		conout(!!rc, NULL);
 	}
 }
 
@@ -711,7 +722,7 @@ int main(int argc, char **argv)
 		gen_pid = fork();
 		if (gen_pid < 0) {
 			ERRNO("Failed to fork gen-config");
-			conout(1, "\n");
+			conout(1, NULL);
 			goto cleanup;
 		}
 		if (gen_pid == 0)
@@ -733,10 +744,10 @@ int main(int argc, char **argv)
 		waitpid(gen_pid, &status, 0);
 		if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) {
 			ERROR("gen-config failed (status=%d)", status);
-			conout(1, "\n");
+			conout(1, NULL);
 			goto cleanup;
 		}
-		conout(0, "\n");
+		conout(0, NULL);
 
 		/* Phase 4: Install factory defaults into all datastores */
 		NOTE("Loading factory-default datastore from %s ...", factory_path);
@@ -744,10 +755,10 @@ int main(int argc, char **argv)
 		r = sr_install_factory_config(conn, factory_path);
 		if (r != SR_ERR_OK) {
 			ERROR("sr_install_factory_config failed: %s", sr_strerror(r));
-			conout(1, "\n");
+			conout(1, NULL);
 			goto cleanup;
 		}
-		conout(0, "\n");
+		conout(0, NULL);
 	}
 
 	/* Phase 5: Start running-datastore session */
@@ -780,7 +791,7 @@ int main(int argc, char **argv)
 		if (r) {
 			ERROR("Plugin \"%s\" initialization failed (%s).", plugins[i].name, sr_strerror(r));
 			if (fatal_fail) {
-				conout(1, "\n");
+				conout(1, NULL);
 				goto cleanup;
 			}
 		} else {
@@ -788,7 +799,7 @@ int main(int argc, char **argv)
 			plugins[i].initialized = 1;
 		}
 	}
-	conout(0, "\n");
+	conout(0, NULL);
 
 	/* Phase 8: Collect subscription contexts from plugins */
 	for (i = 0; i < plugin_count; i++) {
@@ -816,10 +827,10 @@ int main(int argc, char **argv)
 				     failure_path, test_path, timeout_ms)) {
 			kill(pump_pid, SIGTERM);
 			waitpid(pump_pid, NULL, 0);
-			conout(1, "\n");
+			conout(1, NULL);
 			goto cleanup;
 		}
-		conout(0, "\n");
+		conout(0, NULL);
 
 		/* Phase 11: Stop event pump — bootstrap is done */
 		kill(pump_pid, SIGTERM);
