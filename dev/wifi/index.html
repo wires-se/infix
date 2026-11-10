@@ -13,25 +13,25 @@
         <link rel="prev" href="../vpn-wireguard/">
       
       
-        <link rel="next" href="../discovery/">
+        <link rel="next" href="../modem/">
       
       
         
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
     
     
       
-        <title>Wireless LAN (WiFi) - User's Guide</title>
+        <title>Wireless LAN (Wi-Fi) - User's Guide</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -121,7 +121,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Wireless LAN (WiFi)
+              Wireless LAN (Wi-Fi)
             
           </span>
         </div>
@@ -531,7 +531,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../cli/text-editor/" class="md-nav__link">
+      <a href="../cli/edit/" class="md-nav__link">
         
   
   
@@ -624,6 +624,10 @@
   
     
     
+      
+        
+      
+        
       
         
       
@@ -868,6 +872,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../pppoe/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PPPoE Client
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../ip/" class="md-nav__link">
         
   
@@ -1050,10 +1082,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_13">
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_14">
         
           
-          <label class="md-nav__link" for="__nav_4_13" id="__nav_4_13_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_14" id="__nav_4_14_label" tabindex="0">
             
   
   
@@ -1071,8 +1103,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_13_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_13">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_14">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1169,7 +1201,7 @@
   <span class="md-ellipsis">
     
   
-    Wireless LAN (WiFi)
+    Wireless LAN (Wi-Fi)
   
 
     
@@ -1187,7 +1219,7 @@
   <span class="md-ellipsis">
     
   
-    Wireless LAN (WiFi)
+    Wireless LAN (Wi-Fi)
   
 
     
@@ -1269,10 +1301,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#usb-wifi-dongles" class="md-nav__link">
+  <a href="#usb-wi-fi-dongles" class="md-nav__link">
     <span class="md-ellipsis">
       
-        USB WiFi Dongles
+        USB Wi-Fi Dongles
       
     </span>
   </a>
@@ -1330,10 +1362,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#wifi-6-support" class="md-nav__link">
+  <a href="#wi-fi-6-support" class="md-nav__link">
     <span class="md-ellipsis">
       
-        WiFi 6 Support
+        Wi-Fi 6 Support
       
     </span>
   </a>
@@ -1358,21 +1390,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#enable-background-scanning" class="md-nav__link">
+  <a href="#channel-survey" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Enable Background Scanning
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#view-available-networks" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        View Available Networks
+        Channel Survey
       
     </span>
   </a>
@@ -1423,6 +1444,17 @@
     <span class="md-ellipsis">
       
         Step 2: Connect to Network
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#station-roaming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Station Roaming
       
     </span>
   </a>
@@ -1635,6 +1667,56 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#wds-backhaul-and-repeaters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WDS Backhaul and Repeaters
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="WDS Backhaul and Repeaters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#root-access-point-with-wds-ports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Root: access point with WDS ports
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#satellite-4-address-station" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Satellite: 4-address station
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#repeater" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Repeater
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#troubleshooting" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1649,6 +1731,34 @@
   
 </nav>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../modem/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cellular Modem (wwan)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
     </li>
   
 
@@ -1669,6 +1779,10 @@
   
     
     
+      
+        
+      
+        
       
         
       
@@ -1830,6 +1944,62 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../snmp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SNMP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../tftp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    TFTP Server
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1845,6 +2015,10 @@
   
     
     
+      
+        
+      
+        
       
         
       
@@ -1911,6 +2085,62 @@
   
   
     <li class="md-nav__item">
+      <a href="../nacm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Access Control (NACM)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../alarms/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Alarms
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../boot/" class="md-nav__link">
         
   
@@ -1967,34 +2197,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../nacm/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Access Control (NACM)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../hardware/" class="md-nav__link">
         
   
@@ -2003,34 +2205,6 @@
     
   
     Hardware Info &amp; Status
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../management/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Management
   
 
     
@@ -2079,14 +2253,42 @@
   
   
     <li class="md-nav__item">
-      <a href="../syslog/" class="md-nav__link">
+      <a href="../management/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Syslog Support
+    Management
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../schedule/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scheduling
   
 
     
@@ -2115,6 +2317,34 @@
     
   
     Support Data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../syslog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Syslog Support
   
 
     
@@ -2672,6 +2902,60 @@
   
   
     <li class="md-nav__item">
+      <a href="../limitations/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Limitations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../releases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Releases &amp; Support
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../license/" class="md-nav__link">
         
   
@@ -2775,10 +3059,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#usb-wifi-dongles" class="md-nav__link">
+  <a href="#usb-wi-fi-dongles" class="md-nav__link">
     <span class="md-ellipsis">
       
-        USB WiFi Dongles
+        USB Wi-Fi Dongles
       
     </span>
   </a>
@@ -2836,10 +3120,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#wifi-6-support" class="md-nav__link">
+  <a href="#wi-fi-6-support" class="md-nav__link">
     <span class="md-ellipsis">
       
-        WiFi 6 Support
+        Wi-Fi 6 Support
       
     </span>
   </a>
@@ -2864,21 +3148,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#enable-background-scanning" class="md-nav__link">
+  <a href="#channel-survey" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Enable Background Scanning
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#view-available-networks" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        View Available Networks
+        Channel Survey
       
     </span>
   </a>
@@ -2929,6 +3202,17 @@
     <span class="md-ellipsis">
       
         Step 2: Connect to Network
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#station-roaming" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Station Roaming
       
     </span>
   </a>
@@ -3141,6 +3425,56 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#wds-backhaul-and-repeaters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        WDS Backhaul and Repeaters
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="WDS Backhaul and Repeaters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#root-access-point-with-wds-ports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Root: access point with WDS ports
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#satellite-4-address-station" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Satellite: 4-address station
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#repeater" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Repeater
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#troubleshooting" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3220,15 +3554,16 @@
 
 
 <h1 id="wi-fi-wireless-lan">Wi-Fi (Wireless LAN)<a class="headerlink" href="#wi-fi-wireless-lan" title="Permanent link">¶</a></h1>
-<p>Infix includes comprehensive Wi-Fi support for both client (Station) and
-Access Point modes. When a compatible Wi-Fi adapter is detected, the system
-automatically creates a WiFi radio (PHY) in factory-config, that can
+<p>Infix supports Wi-Fi as a client (Station), as an Access Point, as an
+802.11s mesh point, and as a 4-address (WDS) link for wireless bridges
+and repeaters.  When a compatible Wi-Fi adapter is detected, the system
+automatically creates a Wi-Fi radio (PHY) in factory-config, that can
 host virtual interfaces.</p>
 <h2 id="architecture-overview">Architecture Overview<a class="headerlink" href="#architecture-overview" title="Permanent link">¶</a></h2>
-<p>Infix uses a two-layer WiFi architecture:</p>
+<p>Infix uses a two-layer Wi-Fi architecture:</p>
 <ol>
 <li>
-<p><strong>WiFi Radio (PHY layer)</strong>: Represents the physical wireless hardware</p>
+<p><strong>Wi-Fi Radio (PHY layer)</strong>: Represents the physical wireless hardware</p>
 <ul>
 <li>Configured via <code>ietf-hardware</code> module</li>
 <li>Controls channel, transmit power, regulatory domain</li>
@@ -3236,16 +3571,16 @@ host virtual interfaces.</p>
 </ul>
 </li>
 <li>
-<p><strong>WiFi Interface (Network layer)</strong>: Virtual interface on a radio</p>
+<p><strong>Wi-Fi Interface (Network layer)</strong>: Virtual interface on a radio</p>
 <ul>
 <li>Configured via <code>infix-interfaces</code> module</li>
-<li>Can operate in Station (client) or Access Point mode</li>
+<li>Operates in Station (client), Access Point, Mesh Point or WDS link mode</li>
 <li>Each interface references a parent radio</li>
 </ul>
 </li>
 </ol>
 <h2 id="naming-conventions">Naming Conventions<a class="headerlink" href="#naming-conventions" title="Permanent link">¶</a></h2>
-<p>Like other interface types in Infix, WiFi components follow naming conventions
+<p>Like other interface types in Infix, Wi-Fi components follow naming conventions
 that allow the CLI to automatically infer types:</p>
 <table>
 <thead>
@@ -3258,13 +3593,13 @@ that allow the CLI to automatically infer types:</p>
 <tbody>
 <tr>
 <td><code>radioN</code></td>
-<td>WiFi Radio</td>
-<td>Hardware component for WiFi PHY</td>
+<td>Wi-Fi Radio</td>
+<td>Hardware component for Wi-Fi PHY</td>
 </tr>
 <tr>
 <td><code>wifiN</code></td>
-<td>WiFi Interface</td>
-<td>Virtual WiFi interface on a radio</td>
+<td>Wi-Fi Interface</td>
+<td>Virtual Wi-Fi interface on a radio</td>
 </tr>
 </tbody>
 </table>
@@ -3275,14 +3610,16 @@ that allow the CLI to automatically infer types:</p>
 settings are automatically inferred.  For example, creating a hardware
 component named <code>radio0</code> automatically sets its class to <code>wifi</code>, enabling
 the <code>wifi-radio</code> configuration container.</p>
-<p><strong>Note:</strong> This inference only works with the CLI.  Configuring WiFi over
+<p><strong>Note:</strong> This inference only works with the CLI.  Configuring Wi-Fi over
 NETCONF or RESTCONF requires setting the class/type explicitly.</p>
 </div>
 <h2 id="current-limitations">Current Limitations<a class="headerlink" href="#current-limitations" title="Permanent link">¶</a></h2>
 <ul>
 <li>USB hotplug is not supported - adapters must be present at boot</li>
 <li>Interface naming may be inconsistent with multiple USB Wi-Fi adapters</li>
-<li>AP and Station modes cannot be mixed on the same radio</li>
+<li>A station and access points on the same radio must share a channel: the
+  station follows its access point, so pin the radio to that channel on
+  both ends.  See <a href="#wds-backhaul-and-repeaters">WDS Backhaul and Repeaters</a></li>
 </ul>
 <h2 id="supported-wi-fi-adapters">Supported Wi-Fi Adapters<a class="headerlink" href="#supported-wi-fi-adapters" title="Permanent link">¶</a></h2>
 <p>Wi-Fi support is primarily tested with Realtek chipset-based adapters.</p>
@@ -3290,6 +3627,8 @@ NETCONF or RESTCONF requires setting the class/type explicitly.</p>
 <ul>
 <li>Built-in Wi-Fi on Banana Pi BPi-R3</li>
 <li>Built-in Wi-Fi on Raspberry Pi 4/CM4</li>
+<li>Qualcomm WCN6855 PCIe cards, e.g., the QCNFA765: 2.4, 5 and 6 GHz,
+  802.11ax, tested on the Banana Pi BPI-R64</li>
 <li>Realtek:<ul>
 <li>RTL8188CU</li>
 <li>RTL8188FU</li>
@@ -3307,8 +3646,8 @@ standard kernel.</p>
 <li>Check kernel logs if your adapter is not detected</li>
 </ul>
 </div>
-<h3 id="usb-wifi-dongles">USB WiFi Dongles<a class="headerlink" href="#usb-wifi-dongles" title="Permanent link">¶</a></h3>
-<p>USB WiFi dongles may be slow to initialize at boot due to firmware
+<h3 id="usb-wi-fi-dongles">USB Wi-Fi Dongles<a class="headerlink" href="#usb-wi-fi-dongles" title="Permanent link">¶</a></h3>
+<p>USB Wi-Fi dongles may be slow to initialize at boot due to firmware
 loading. If your USB dongle is not detected reliably, configure a
 <code>probe-timeout</code> on the radio to wait for the PHY:</p>
 <pre class="cli"><code>admin@example:/&gt; <b>configure</b>
@@ -3318,21 +3657,28 @@ admin@example:/config/hardware/component/radio0/wifi-radio/&gt; <b>leave</b>
 </code></pre>
 
 <p>This waits up to 30 seconds for the radio PHY to appear before creating
-WiFi interfaces. If the PHY is not detected within the timeout, a dummy
+Wi-Fi interfaces. If the PHY is not detected within the timeout, a dummy
 interface is created as a placeholder, allowing IP configuration to proceed.
 Reboot when the radio becomes available.</p>
 <h2 id="radio-configuration">Radio Configuration<a class="headerlink" href="#radio-configuration" title="Permanent link">¶</a></h2>
-<p>Before configuring WiFi interfaces, you must first configure the WiFi radio.
+<p>Before configuring Wi-Fi interfaces, you must first configure the Wi-Fi radio.
 Radios are automatically discovered and named <code>radio0</code>, <code>radio1</code>, etc.</p>
 <h3 id="country-code">Country Code ⚠<a class="headerlink" href="#country-code" title="Permanent link">¶</a></h3>
-<p>The radio defaults to "00" for World domain, but some systems may ship with a
-factory default country code (typically "DE" for the BPi-R3).</p>
+<p>The country code is one setting for all radios in the system, since the
+regulatory domain is one setting in the kernel.  It defaults to "00", the
+world domain: no 6 GHz, listen-only on 5 GHz, and no access point or mesh
+point can be configured.  Some systems ship with a factory default
+(typically "DE" for the BPi-R3).</p>
+<pre class="cli"><code>admin@example:/&gt; <b>configure</b>
+admin@example:/config/&gt; <b>set hardware wifi country-code DE</b>
+admin@example:/config/&gt; <b>leave</b>
+</code></pre>
+
 <div class="admonition tip">
 <p class="admonition-title">Legal notice!</p>
-<p>The <code>country-code</code> setting is <strong>legally required</strong> and determines
-which WiFi channels and power levels are permitted in your
-location. Using an incorrect country code may violate local wireless
-regulations.</p>
+<p>The country code is <strong>legally required</strong> and determines which Wi-Fi
+channels and power levels are permitted in your location. Using an
+incorrect country code may violate local wireless regulations.</p>
 </div>
 <p><strong>Common country codes, see <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166-1 alpha-2</a> for the complete list</strong>:</p>
 <ul>
@@ -3358,18 +3704,17 @@ regulations.</p>
 </li>
 </ul>
 <h3 id="basic-radio-setup">Basic Radio Setup<a class="headerlink" href="#basic-radio-setup" title="Permanent link">¶</a></h3>
-<p>Configure the radio with channel, power, and regulatory domain.</p>
+<p>Configure the radio with band and channel.  The country code above covers
+all radios.</p>
 <p><strong>For Station (client) mode:</strong></p>
 <pre class="cli"><code>admin@example:/&gt; <b>configure</b>
 admin@example:/config/&gt; <b>edit hardware component radio0 wifi-radio</b>
-admin@example:/config/hardware/component/radio0/wifi-radio/&gt; <b>set country-code DE</b>
 admin@example:/config/hardware/component/radio0/wifi-radio/&gt; <b>leave</b>
 </code></pre>
 
 <p><strong>For Access Point mode:</strong></p>
 <pre class="cli"><code>admin@example:/&gt; <b>configure</b>
 admin@example:/config/&gt; <b>edit hardware component radio0 wifi-radio</b>
-admin@example:/config/hardware/component/radio0/wifi-radio/&gt; <b>set country-code DE</b>
 admin@example:/config/hardware/component/radio0/wifi-radio/&gt; <b>set band 5GHz</b>
 admin@example:/config/hardware/component/radio0/wifi-radio/&gt; <b>set channel 36</b>
 admin@example:/config/hardware/component/radio0/wifi-radio/&gt; <b>set channel-width 80MHz</b>
@@ -3377,12 +3722,10 @@ admin@example:/config/hardware/component/radio0/wifi-radio/&gt; <b>leave</b>
 </code></pre>
 
 <p><strong>Key radio parameters:</strong></p>
+<p><strong>⚠ Must match your physical location for legal compliance! ⚠</strong></p>
 <ul>
-<li><code>country-code</code>: Two-letter <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166-1 alpha-2</a> code, determines allowed
-  channels and maximum power. Examples: US, DE, GB, SE, FR, JP.<br>
-<strong>⚠ Must match your physical location for legal compliance! ⚠</strong></li>
 <li><code>band</code>: 2.4GHz, 5GHz, or 6GHz (required for AP mode). Automatically enables
-  appropriate WiFi standards:<ul>
+  appropriate Wi-Fi standards:<ul>
 <li>2.4GHz: 802.11n/ax</li>
 <li>5GHz: 802.11n/ac/ax</li>
 <li>6GHz: 802.11ax</li>
@@ -3399,7 +3742,7 @@ admin@example:/config/hardware/component/radio0/wifi-radio/&gt; <b>leave</b>
   Enable only when old 2.4GHz-only IoT devices need them to associate.  No
   effect on 5GHz/6GHz.</li>
 <li><code>probe-timeout</code>: Seconds to wait for PHY detection at boot (default: 0).  Set
-  to a non-zero value (e.g., 30) for USB WiFi dongles that are slow to
+  to a non-zero value (e.g., 30) for USB Wi-Fi dongles that are slow to
   initialize due to firmware loading</li>
 </ul>
 <div class="admonition note">
@@ -3463,10 +3806,10 @@ there is no radar start-up delay.</p>
   protection, so WPA2-only and open networks are rejected.</li>
 <li>Indoor power limits cap coverage further.</li>
 </ul>
-<h3 id="wifi-6-support">WiFi 6 Support<a class="headerlink" href="#wifi-6-support" title="Permanent link">¶</a></h3>
-<p>WiFi 6 (802.11ax) is always enabled in AP mode on all bands, providing improved
+<h3 id="wi-fi-6-support">Wi-Fi 6 Support<a class="headerlink" href="#wi-fi-6-support" title="Permanent link">¶</a></h3>
+<p>Wi-Fi 6 (802.11ax) is always enabled in AP mode on all bands, providing improved
 performance through features like OFDMA, BSS Coloring, and beamforming.</p>
-<p><strong>WiFi 6 Features (always enabled in AP mode on supported radios):</strong></p>
+<p><strong>Wi-Fi 6 Features (always enabled in AP mode on supported radios):</strong></p>
 <ul>
 <li><strong>OFDMA</strong>: Better multi-user efficiency in dense environments</li>
 <li><strong>BSS Coloring</strong>: Reduced interference from neighboring networks</li>
@@ -3475,8 +3818,8 @@ performance through features like OFDMA, BSS Coloring, and beamforming.</p>
 <p><strong>Requirements:</strong></p>
 <ul>
 <li>Hardware must support 802.11ax</li>
-<li>Client devices must support WiFi 6 for full benefits</li>
-<li>Older WiFi 5/4 clients can still connect but won't use WiFi 6 features</li>
+<li>Client devices must support Wi-Fi 6 for full benefits</li>
+<li>Older Wi-Fi 5/4 clients can still connect but won't use Wi-Fi 6 features</li>
 </ul>
 <div class="admonition tip">
 <p class="admonition-title">Important</p>
@@ -3485,64 +3828,51 @@ management frame protection.  Open networks and WPA2-only AP
 configurations are not valid on 6 GHz.</p>
 </div>
 <h2 id="discovering-available-networks">Discovering Available Networks<a class="headerlink" href="#discovering-available-networks" title="Permanent link">¶</a></h2>
-<p>Before connecting to a WiFi network, you need to discover which networks
-are available. Infix automatically scans for networks when a WiFi interface
-is created with a radio reference.</p>
-<h3 id="enable-background-scanning">Enable Background Scanning<a class="headerlink" href="#enable-background-scanning" title="Permanent link">¶</a></h3>
-<p>To enable scanning without connecting, configure the radio and create a WiFi
-interface referencing it:</p>
-<p><strong>Step 1: Configure the radio</strong></p>
-<pre class="cli"><code>admin@example:/&gt; <b>configure</b>
-admin@example:/config/&gt; <b>edit hardware component radio0 wifi-radio</b>
-admin@example:/config/hardware/component/radio0/wifi-radio/&gt; <b>set country-code DE</b>
-admin@example:/config/hardware/component/radio0/wifi-radio/&gt; <b>leave</b>
+<p>Before connecting to a Wi-Fi network you need to know which networks are in
+range.  A scan lists them, with signal strength and security, and works on
+any radio, whether or not it has an interface yet.  The radio leaves its
+channel for a few seconds during the scan, so traffic on it pauses.</p>
+<pre class="cli"><code>admin@example:/&gt; <b>show hardware radio0 scan</b>
+SSID                  BSSID              SECURITY       SIGNAL   CHANNEL
+MyNetwork             b4:fb:e4:17:b6:a7  WPA2-Personal  -45 dBm        6
+MyNetwork-6G          b4:fb:e4:17:b6:a8  WPA3-Personal  -58 dBm       37
+GuestWiFi             c8:3a:35:12:34:56  WPA2-Personal  -62 dBm       11
+CoffeeShop            00:1a:2b:3c:4d:5e  Open           -78 dBm        1
 </code></pre>
 
-<p><strong>Step 2: Create WiFi interface with radio reference only</strong></p>
-<pre class="cli"><code>admin@example:/&gt; <b>configure</b>
-admin@example:/config/&gt; <b>edit interface wifi0</b>
-admin@example:/config/interface/wifi0/&gt; <b>set wifi radio radio0</b>
-admin@example:/config/interface/wifi0/&gt; <b>leave</b>
+<p>A hidden network shows up without a name.  Several entries with the same
+SSID are the access points of one roaming network, the BSSID tells them
+apart.</p>
+<p>In the WebUI, each radio on the Wi-Fi page has a <strong>Scan networks</strong> button
+that lists the same networks.</p>
+<p>Over NETCONF or RESTCONF the scan is the <code>scan</code> action on the radio's
+hardware component.  Its output is a list of networks keyed by BSSID, with
+the SSID, frequency, channel, signal strength and encryption of each.</p>
+<h3 id="channel-survey">Channel Survey<a class="headerlink" href="#channel-survey" title="Permanent link">¶</a></h3>
+<p>A channel survey shows how busy each channel is, which helps when picking a
+channel for an access point or when a link performs worse than its signal
+strength suggests.  The radio has to leave its operating channel to measure
+the others, so traffic on it pauses for a few seconds.  Because of that the
+survey only runs when asked for, it is not collected in the background.</p>
+<pre class="cli"><code>admin@example:/&gt; <b>show hardware radio0 survey</b>
 </code></pre>
 
-<p>The system will now start scanning in the background. The interface will
-operate in scan-only mode until you configure a specific mode (station or
-access-point).</p>
-<h3 id="view-available-networks">View Available Networks<a class="headerlink" href="#view-available-networks" title="Permanent link">¶</a></h3>
-<p>Use <code>show interface</code> to see discovered networks and their signal strength:</p>
-<pre class="cli"><code>admin@example:/&gt; <b>show interface wifi0</b>
-name               : wifi0
-type               : wifi
-index              : 3
-mtu                : 1500
-operational status : up
-ip forwarding      : enabled
-physical address   : f0:09:0d:36:5f:86
-ipv4 addresses     : 192.168.1.100/24 (dhcp)
-ipv6 addresses     :
-in-octets          : 148388
-out-octets         : 24555
-mode               : station
-ssid               : MyNetwork
-bssid              : b4:fb:e4:17:b6:a7
-signal             : -45 dBm (good)
-rx bitrate         : 72.2 Mbps
-tx bitrate         : 86.6 Mbps
-──────────────────────────────────────────────────────────────────────
-<span class="title">Available Networks</span>
-<span class="header">SSID                 BSSID              SECURITY       SIGNAL  CHANNEL</span>
-MyNetwork            b4:fb:e4:17:b6:a7  WPA2-Personal  good          6
-GuestWiFi            c8:3a:35:12:34:56  WPA2-Personal  fair         11
-CoffeeShop           00:1a:2b:3c:4d:5e  Open           bad           1
-</code></pre>
-
-<p>In the CLI, signal strength is reported as: excellent, good, fair or bad.
-For precise signal strength values in dBm, use NETCONF or RESTCONF to access
-the <code>signal-strength</code> leaf in the operational datastore.</p>
-<p>When connected, <code>bssid</code> shows the MAC address of the access point the
-station is associated to.  It appears only while connected.  When several
-access points share one SSID (a roaming network), the <code>bssid</code> is what
-tells them apart, and it changes as the station roams between them.</p>
+<p>The output lists every channel the radio supports with its noise floor and
+utilization, marks the operating channel, and suggests the least busy
+channels per band.  A radio that has no interface yet can be surveyed too,
+which helps when picking a band and channel for it.  Add <code>passive</code> to listen longer on each channel without sending
+probe requests, which gives a steadier utilization reading at the cost of a
+longer pause.</p>
+<p>Not every driver reports channel survey data.  On Intel cards, e.g., the
+AX210, the survey fails with <em>the driver reports no per-channel survey
+data</em>, use <code>show hardware radio0 scan</code> to see which channels other networks
+use.</p>
+<p>In the WebUI, each radio on the Wi-Fi page has a <strong>Scan channels</strong> button that
+draws the same survey as a chart.</p>
+<p>Over NETCONF or RESTCONF the survey is the <code>channel-survey</code> action on the
+radio's hardware component.  Its output is a list of channels keyed by
+frequency, with the busy, receive and transmit time out of the total time
+the radio spent listening on each.</p>
 <h2 id="passphrase-requirements">Passphrase Requirements<a class="headerlink" href="#passphrase-requirements" title="Permanent link">¶</a></h2>
 <p>To ensure your connection is secure and compatible with all network
 hardware, your passphrase must meet the following criteria:</p>
@@ -3557,32 +3887,33 @@ hardware, your passphrase must meet the following criteria:</p>
 </ul>
 <div class="admonition tip">
 <p class="admonition-title">Why the limit?</p>
-<p>Standard WiFi security (WPA2/WPA3) requires a minimum of 8 characters to
+<p>Standard Wi-Fi security (WPA2/WPA3) requires a minimum of 8 characters to
 prevent "brute-force" hacking.  The character limit ensures your password
 works on older routers and various operating systems.<br>
 Tips for password strength, see <a href="https://xkcd.com/936/">XKCD #936</a>.</p>
 </div>
 <h2 id="station-mode-client">Station Mode (Client)<a class="headerlink" href="#station-mode-client" title="Permanent link">¶</a></h2>
 <p>Station mode connects to an existing Wi-Fi network. Before configuring station
-mode, follow the "Discovering Available Networks (Scanning)" section above to
-scan for available networks and identify the SSID you want to connect to.</p>
+mode, follow the "Discovering Available Networks" section above to scan for
+available networks and identify the SSID you want to connect to.</p>
 <h3 id="step-1-configure-password">Step 1: Configure Password<a class="headerlink" href="#step-1-configure-password" title="Permanent link">¶</a></h3>
-<p>Create a keystore entry for your WiFi password (8-63 characters):</p>
+<p>Create a keystore entry for your Wi-Fi password (8-63 characters):</p>
 <pre class="cli"><code>admin@example:/&gt; <b>configure</b>
 admin@example:/config/&gt; <b>edit keystore symmetric-key my-wifi-key</b>
 admin@example:/config/keystore/…/my-wifi-key/&gt; <b>set key-format passphrase-key-format</b>
-admin@example:/config/keystore/…/my-wifi-key/&gt; <b>change cleartext-symmetric-key</b>
+admin@example:/config/keystore/…/my-wifi-key/&gt; <b>edit cleartext-symmetric-key</b>
 Passphrase: ************
 Retype passphrase: ************
 admin@example:/config/keystore/…/my-wifi-key/&gt; <b>leave</b>
 </code></pre>
 
-<p>The <code>change</code> command prompts for the passphrase interactively and
+<p>The <code>edit</code> command prompts for the passphrase interactively and
 handles the base64 encoding required by the keystore automatically.</p>
 <h3 id="step-2-connect-to-network">Step 2: Connect to Network<a class="headerlink" href="#step-2-connect-to-network" title="Permanent link">¶</a></h3>
 <p>Configure station mode with the SSID and password to connect:</p>
 <pre class="cli"><code>admin@example:/&gt; <b>configure</b>
 admin@example:/config/&gt; <b>edit interface wifi0</b>
+admin@example:/config/interface/wifi0/&gt; <b>set wifi radio radio0</b>
 admin@example:/config/interface/wifi0/&gt; <b>set wifi station ssid MyHomeNetwork</b>
 admin@example:/config/interface/wifi0/&gt; <b>set wifi station security secret my-wifi-key</b>
 admin@example:/config/interface/wifi0/&gt; <b>leave</b>
@@ -3602,7 +3933,7 @@ signal             : -52 dBm (good)
 
 <p><strong>Station configuration parameters:</strong></p>
 <ul>
-<li><code>radio</code>: Reference to the WiFi radio (mandatory) - already set during scanning</li>
+<li><code>radio</code>: Reference to the Wi-Fi radio (mandatory)</li>
 <li><code>station ssid</code>: Network name to connect to (mandatory)</li>
 <li><code>station security mode</code>:<ul>
 <li><code>auto</code>: default, WPA2/WPA3 auto-negotiation</li>
@@ -3611,25 +3942,47 @@ signal             : -52 dBm (good)
 </li>
 <li><code>station security secret</code>: Reference to keystore entry, required unless mode
   is <code>disabled</code></li>
+<li><code>station roaming</code>: Look for a stronger access point while connected, on by
+  default, see <a href="#station-roaming">Station Roaming</a></li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The <code>auto</code> security mode automatically selects WPA3-SAE or WPA2-PSK based on
 what the access point supports, prioritizing WPA3 for better security.
+The station offers management frame protection on every connection, so
+WPA3-only networks, and any network on 6 GHz, accept it.
 Certificate-based authentication (802.1X/EAP) is not yet supported.</p>
 </div>
+<h3 id="station-roaming">Station Roaming<a class="headerlink" href="#station-roaming" title="Permanent link">¶</a></h3>
+<p>A network with several access points on the same SSID lets the station
+move to a stronger one.  While connected, the station scans every 30
+seconds when its signal is below a threshold, -75 dBm by default, and
+every 10 minutes otherwise.  Traffic pauses for a moment during each
+scan.</p>
+<p>Raise the threshold to look for a better access point sooner:</p>
+<pre class="cli"><code>admin@example:/config/interface/wifi0/&gt; <b>set wifi station roaming signal-threshold -65</b>
+</code></pre>
+
+<p>On a fixed link, such as a point-to-point backhaul, turn roaming off so
+no scan ever pauses traffic:</p>
+<pre class="cli"><code>admin@example:/config/interface/wifi0/&gt; <b>set wifi station roaming enabled false</b>
+</code></pre>
+
+<p>Without roaming, or with <code>peer-bssid</code> set, the station changes access
+point only when it loses the current one or that access point asks it to
+move, see <a href="#80211v-bss-transition-management">802.11v</a>.</p>
 <h2 id="access-point-mode">Access Point Mode<a class="headerlink" href="#access-point-mode" title="Permanent link">¶</a></h2>
-<p>Access Point (AP) mode allows your device to create a WiFi network that
+<p>Access Point (AP) mode allows your device to create a Wi-Fi network that
 other devices can connect to. APs are configured as virtual interfaces on
-a WiFi radio.</p>
+a Wi-Fi radio.</p>
 <h3 id="basic-ap-configuration">Basic AP Configuration<a class="headerlink" href="#basic-ap-configuration" title="Permanent link">¶</a></h3>
 <p>First, ensure the radio is configured (see Radio Configuration above). Then
-create a keystore entry for your WiFi password and configure the AP interface:</p>
-<p><strong>Step 1: Create keystore entry for the WiFi password</strong></p>
+create a keystore entry for your Wi-Fi password and configure the AP interface:</p>
+<p><strong>Step 1: Create keystore entry for the Wi-Fi password</strong></p>
 <pre class="cli"><code>admin@example:/&gt; <b>configure</b>
 admin@example:/config/&gt; <b>edit keystore symmetric-key my-wifi-secret</b>
 admin@example:/config/keystore/…/my-wifi-secret/&gt; <b>set key-format passphrase-key-format</b>
-admin@example:/config/keystore/…/my-wifi-secret/&gt; <b>change cleartext-symmetric-key</b>
+admin@example:/config/keystore/…/my-wifi-secret/&gt; <b>edit cleartext-symmetric-key</b>
 Passphrase: ************
 Retype passphrase: ************
 admin@example:/config/keystore/…/my-wifi-secret/&gt; <b>end</b>
@@ -3645,12 +3998,12 @@ admin@example:/config/interface/wifi0/&gt; <b>leave</b>
 
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Using <code>wifiN</code> as the interface name automatically sets the type to WiFi.
+<p>Using <code>wifiN</code> as the interface name automatically sets the type to Wi-Fi.
 Alternatively, you can use any name and explicitly set <code>type wifi</code>.</p>
 </div>
 <p><strong>Access Point configuration parameters:</strong></p>
 <ul>
-<li><code>radio</code>: Reference to the WiFi radio (mandatory)</li>
+<li><code>radio</code>: Reference to the Wi-Fi radio (mandatory)</li>
 <li><code>access-point ssid</code>: Network name (SSID) to broadcast</li>
 <li><code>access-point hidden</code>: Set to <code>true</code> to hide SSID (optional, default: false)</li>
 <li><code>access-point security mode</code>: Security mode (see below)</li>
@@ -3675,8 +4028,8 @@ each with independent security settings. This is useful for guest networks,
 IoT devices, or segregating traffic into different VLANs.</p>
 <p><strong>Step 1: Configure the radio</strong> (shared by all APs)</p>
 <pre class="cli"><code>admin@example:/&gt; <b>configure</b>
+admin@example:/config/&gt; <b>set hardware wifi country-code DE</b>
 admin@example:/config/&gt; <b>edit hardware component radio0 wifi-radio</b>
-admin@example:/config/hardware/component/radio0/wifi-radio/&gt; <b>set country-code DE</b>
 admin@example:/config/hardware/component/radio0/wifi-radio/&gt; <b>set band 5GHz</b>
 admin@example:/config/hardware/component/radio0/wifi-radio/&gt; <b>set channel 36</b>
 admin@example:/config/hardware/component/radio0/wifi-radio/&gt; <b>leave</b>
@@ -3686,17 +4039,17 @@ admin@example:/config/hardware/component/radio0/wifi-radio/&gt; <b>leave</b>
 <pre class="cli"><code>admin@example:/&gt; <b>configure</b>
 admin@example:/config/&gt; <b>edit keystore symmetric-key main-secret</b>
 admin@example:/config/keystore/…/main-secret/&gt; <b>set key-format passphrase-key-format</b>
-admin@example:/config/keystore/…/main-secret/&gt; <b>change cleartext-symmetric-key</b>
+admin@example:/config/keystore/…/main-secret/&gt; <b>edit cleartext-symmetric-key</b>
 Passphrase: ************
 Retype passphrase: ************
 admin@example:/config/&gt; <b>edit keystore symmetric-key guest-secret</b>
 admin@example:/config/keystore/…/guest-secret/&gt; <b>set key-format passphrase-key-format</b>
-admin@example:/config/keystore/…/guest-secret/&gt; <b>change cleartext-symmetric-key</b>
+admin@example:/config/keystore/…/guest-secret/&gt; <b>edit cleartext-symmetric-key</b>
 Passphrase: ************
 Retype passphrase: ************
 admin@example:/config/&gt; <b>edit keystore symmetric-key iot-secret</b>
 admin@example:/config/keystore/…/iot-secret/&gt; <b>set key-format passphrase-key-format</b>
-admin@example:/config/keystore/…/iot-secret/&gt; <b>change cleartext-symmetric-key</b>
+admin@example:/config/keystore/…/iot-secret/&gt; <b>edit cleartext-symmetric-key</b>
 Passphrase: ************
 Retype passphrase: ************
 admin@example:/config/keystore/…/iot-secret/&gt; <b>leave</b>
@@ -3717,7 +4070,6 @@ admin@example:/config/interface/wifi1/&gt; <b>set wifi radio radio0</b>
 admin@example:/config/interface/wifi1/&gt; <b>set wifi access-point ssid GuestNetwork</b>
 admin@example:/config/interface/wifi1/&gt; <b>set wifi access-point security mode wpa2-wpa3-personal</b>
 admin@example:/config/interface/wifi1/&gt; <b>set wifi access-point security secret guest-secret</b>
-admin@example:/config/interface/wifi1/&gt; <b>set custom-phys-address static 00:0c:43:26:60:01</b>
 
 # IoT AP - IoT devices (WPA2 for older device compatibility)
 admin@example:/config/&gt; <b>edit interface wifi2</b>
@@ -3725,25 +4077,25 @@ admin@example:/config/interface/wifi2/&gt; <b>set wifi radio radio0</b>
 admin@example:/config/interface/wifi2/&gt; <b>set wifi access-point ssid IoT-Devices</b>
 admin@example:/config/interface/wifi2/&gt; <b>set wifi access-point security mode wpa2-personal</b>
 admin@example:/config/interface/wifi2/&gt; <b>set wifi access-point security secret iot-secret</b>
-admin@example:/config/interface/wifi2/&gt; <b>set custom-phys-address static 00:0c:43:26:60:02</b>
 admin@example:/config/interface/wifi2/&gt; <b>leave</b>
 </code></pre>
 
-<div class="admonition tip">
-<p class="admonition-title">Important</p>
-<p><strong>MAC Address Requirement for Multi-SSID:</strong>
-When creating multiple AP interfaces on the same radio, you <strong>must</strong> configure
-a unique MAC address for each secondary interface (wifi1, wifi2, etc.) using
-<code>set custom-phys-address static &lt;MAC&gt;</code>. All interfaces on the same radio inherit
-the radio's hardware MAC address by default, which causes network conflicts. Only
-the primary interface (alphabetically first, e.g., wifi0) should use the default
-hardware MAC address.</p>
-<p>Choose MAC addresses from the same locally-administered range:</p>
-<ul>
-<li>Primary (wifi0): Uses hardware MAC (e.g., <code>00:0c:43:26:60:00</code>)</li>
-<li>Secondary (wifi1): <code>00:0c:43:26:60:01</code> (increment last octet)</li>
-<li>Tertiary (wifi2): <code>00:0c:43:26:60:02</code> (increment last octet)</li>
-</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Each Wi-Fi interface gets its own MAC address, derived from the chassis
+MAC and numbered per radio.  Only the first two octets change, so it
+never meets a port address: the locally administered bit is set and
+the interface's position among the interfaces on its radio, sorted by
+name, plus one is stored in the upper bits of the first octet, and
+the radio's index is added to the second.  On a device with chassis
+MAC <code>00:53:00:c0:ff:ee</code>, <code>wifi0</code> and <code>wifi1</code> on <code>radio0</code> become
+<code>06:53:00:c0:ff:ee</code> and <code>0a:53:00:c0:ff:ee</code>, and the first interface
+on <code>radio1</code> becomes <code>06:54:00:c0:ff:ee</code>.  Several APs on one radio
+therefore never share an address, and two devices of the same model
+never collide.  Adding or removing an interface on a radio moves the
+others on that radio, which then restart.  To use a fixed address
+instead, set <code>custom-phys-address</code> on the interface, see
+<a href="../iface/#custom-mac-address">Common Interface Settings</a>.</p>
 </div>
 <p><strong>Result:</strong> Three SSIDs broadcasting simultaneously on radio0:</p>
 <ul>
@@ -3759,12 +4111,15 @@ hardware MAC address.</p>
 <li>Hidden/visible SSID setting</li>
 <li>Bridge membership</li>
 </ul>
-<p>You can verify the configuration with <code>show hardware component radio0</code> to see
+<p>You can verify the configuration with <code>show hardware radio0</code> to see
 radio settings, and <code>show interface</code> to see all active AP interfaces.</p>
-<div class="admonition tip">
-<p class="admonition-title">Important</p>
-<p>AP and Station modes cannot be mixed on the same radio. All virtual interfaces
-on a radio must be the same mode (all APs or all Stations).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A radio hosts any number of access points but only one enabled
+station.  More stations can be configured on it as long as they are
+disabled, e.g., to keep the settings for other networks and switch
+with the <code>enabled</code> flag.  The station follows its access point's
+channel, see <a href="#current-limitations">Current Limitations</a>.</p>
 </div>
 <h2 id="fast-roaming-between-access-points">Fast Roaming Between Access Points<a class="headerlink" href="#fast-roaming-between-access-points" title="Permanent link">¶</a></h2>
 <p>Fast roaming enables seamless client handoff between access points through
@@ -3772,16 +4127,46 @@ on a radio must be the same mode (all APs or all Stations).</p>
 your requirements.</p>
 <h3 id="80211r-fast-bss-transition">802.11r - Fast BSS Transition<a class="headerlink" href="#80211r-fast-bss-transition" title="Permanent link">¶</a></h3>
 <p>Enable 802.11r for fast handoff (&lt;50ms) between APs with the same SSID:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>admin@example:/config/interface/wifi0/&gt; set wifi access-point roaming dot11r
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>admin@example:/config/&gt; edit interface wifi0
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>admin@example:/config/interface/wifi0/&gt; set wifi access-point roaming dot11r mobility-domain 4f57
 </code></pre></div>
-<p><strong>Requirements:</strong>
-- All APs in roaming group must have <strong>identical</strong> SSID
-- All APs must have <strong>identical</strong> passphrase (same keystore secret)
-- All APs must use the <strong>same mobility-domain</strong> identifier</p>
-<p><strong>Mobility Domain Options:</strong>
-- Explicit 4-character hex value (e.g., <code>4f57</code>) - default if not specified
-- <code>hash</code> - Automatically derive from SSID using MD5 (OpenWrt-compatible)</p>
+<p>The access points hand each other a roaming client's keys, protected
+with a secret they all share.  By default that is the Wi-Fi password,
+which is fine for a home or small office network.  Anyone who knows the
+password can then also read the other clients' keys, so on a network
+shared with people you do not trust, give the access points a secret of
+their own, the key holder secret.  Create it in the keystore on every
+device, with the same value:</p>
+<pre class="cli"><code>admin@example:/config/&gt; <b>edit keystore symmetric-key roaming-key</b>
+admin@example:/config/keystore/…/roaming-key/&gt; <b>set key-format passphrase-key-format</b>
+admin@example:/config/keystore/…/roaming-key/&gt; <b>edit cleartext-symmetric-key</b>
+Passphrase: ************
+Retype passphrase: ************
+admin@example:/config/keystore/…/roaming-key/&gt; <b>end</b>
+admin@example:/config/&gt; <b>set interface wifi0 wifi access-point roaming dot11r key-holder-secret roaming-key</b>
+</code></pre>
+
+<p><strong>Requirements:</strong></p>
+<ul>
+<li>All APs in roaming group must have <strong>identical</strong> SSID</li>
+<li>All APs must have <strong>identical</strong> passphrase (same keystore secret)</li>
+<li>All APs must have the <strong>same key holder secret</strong>, if one is set</li>
+<li>All APs must use the <strong>same mobility-domain</strong> identifier</li>
+<li>APs on different devices must be ports of bridges that are connected
+  to each other, over a cable, a mesh or a WDS backhaul.  The APs hand a
+  client's keys to each other over that network as soon as it connects,
+  which WPA3 clients need for a fast transition, so a client can keep
+  roaming after the AP it first connected to has gone down.  On a bridge
+  with VLAN filtering
+  the keys travel in the APs' VLAN, so each device needs a VLAN
+  interface on the bridge for that VLAN, the one carrying its IP address
+  there is enough</li>
+</ul>
+<p><strong>Mobility Domain Options:</strong></p>
+<ul>
+<li>Explicit 4-character hex value (e.g., <code>4f57</code>) - default if not specified</li>
+<li><code>hash</code> - Automatically derive from SSID using MD5 (OpenWrt-compatible)</li>
+</ul>
 <p>Using <code>hash</code> allows multiple APs with the same SSID to automatically share
 the same mobility domain without manual configuration:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>admin@example:/config/interface/wifi0/&gt; set wifi access-point roaming dot11r mobility-domain hash
@@ -3804,22 +4189,53 @@ BSS and stable across reboots.</p>
 </code></pre></div>
 <p>Enables neighbor reports and beacon reports, allowing clients to discover
 nearby APs before roaming.</p>
+<p>Devices with access points on the same network tell each other about
+them, over that network, so every access point knows the other access
+points of its SSID on the other devices and lists them in its neighbor
+reports.  A client asking where else its network exists gets the real
+answer, and a client asked to move, see below, is told where to.  A
+device that comes up later is known to the others within a minute.
+The exchange is protected with the 802.11r key, so it needs fast
+roaming on the access points, see above.</p>
 <h3 id="80211v-bss-transition-management">802.11v - BSS Transition Management<a class="headerlink" href="#80211v-bss-transition-management" title="Permanent link">¶</a></h3>
 <p>Enable 802.11v for network-assisted roaming:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>admin@example:/config/interface/wifi0/&gt; set wifi access-point roaming dot11v
 </code></pre></div>
 <p>Allows APs to suggest better APs to clients, improving roaming decisions.</p>
+<p>An access point about to stop, because the device reboots, is upgraded,
+or its Wi-Fi configuration changes, also uses 802.11v to ask its clients
+to move first, naming the other access points of the SSID it knows of.
+Clients that support it roam to one of them while the radio is still
+up, instead of noticing the loss afterwards and scanning for a new
+network.  Clients without 802.11v are disconnected as before.</p>
 <h4 id="band-steering-mbo">Band Steering (MBO)<a class="headerlink" href="#band-steering-mbo" title="Permanent link">¶</a></h4>
 <p>Enabling <code>dot11v</code> also turns on MBO (Multi-Band Operation), advertised in
 beacons and association responses.  MBO lets a dual-band client see that
 the same SSID exists on another band and decide for itself when to move,
 while 802.11v BSS Transition Management lets the AP suggest a better
 target.</p>
-<p>On top of the client-cooperative hints, the AP applies active steering:
-on a 2.4 GHz access-point it suppresses probe responses to clients that
-were recently seen on the same SSID on the 5/6 GHz band, nudging
-dual-band clients onto the higher band.  MBO is <strong>enabled by default</strong>
-whenever <code>dot11v</code> is enabled:</p>
+<p>On top of these hints, the device steers dual-band clients to 5 or 6 GHz
+itself.  Each radio remembers the clients it has seen during the last
+minute.  A 2.4 GHz access point whose SSID also exists on a higher band
+of the same device treats a client that higher band has seen as
+dual-band and in range of it:</p>
+<ul>
+<li>it does not answer the client's probe requests, so a client choosing
+  a network tends to pick the higher band,</li>
+<li>a client that is connected on 2.4 GHz anyway, for example because it
+  joined while the higher band was down, is asked to move with an
+  802.11v request naming the higher band, as long as its 2.4 GHz signal
+  is good enough for the move to make sense and the higher band is up.
+  A client that shrugs off a couple of requests is left alone for an
+  hour.</li>
+</ul>
+<p>A client is never refused on 2.4 GHz, so one that cannot get in on the
+higher band still has a way in.  Clients that only support 2.4 GHz are
+never seen on the higher band and are not affected, and clients that
+ignore 802.11v requests stay where they are.  Band
+steering is <strong>enabled by default</strong> whenever <code>dot11v</code> is enabled.  The
+setting is read on the 2.4 GHz access point, the one that defers and
+moves clients; on a 5 or 6 GHz access point it has no effect:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>admin@example:/config/interface/wifi0/&gt; set wifi access-point roaming dot11v
 </code></pre></div>
 <p>To turn it off while keeping BSS Transition Management:</p>
@@ -3861,9 +4277,8 @@ fast transition.</p>
 <h2 id="80211s-mesh-point-mode">802.11s Mesh Point Mode<a class="headerlink" href="#80211s-mesh-point-mode" title="Permanent link">¶</a></h2>
 <p>IEEE 802.11s is a wireless mesh networking standard operating at Layer 2.
 Mesh nodes form peer links directly with each other and route traffic
-using HWMP (Hybrid Wireless Mesh Protocol), which is built into the
-Linux mac80211 subsystem.  There is no central controller; nodes
-discover peers and find paths on their own.</p>
+using HWMP (Hybrid Wireless Mesh Protocol).  There is no central
+controller; nodes discover peers and find paths on their own.</p>
 <p>The standard defines two node roles:</p>
 <ul>
 <li><strong>Mesh Point (MP)</strong> - a basic mesh node that forwards traffic within
@@ -3873,12 +4288,12 @@ discover peers and find paths on their own.</p>
 </ul>
 <p>In practice, a node bridging the mesh interface to a LAN acts as a mesh
 portal.</p>
+<p>For a backhaul with a single root, where multi-hop and self-healing are
+not needed, see <a href="#wds-backhaul-and-repeaters">WDS Backhaul and Repeaters</a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Not all WiFi hardware supports 802.11s mesh.  The driver must implement
-mesh point mode in mac80211.  Check your adapter's capabilities with
-<code>iw phy &lt;phy&gt; info</code> and look for "mesh point" under "Supported interface
-modes".</p>
+<p>Not all Wi-Fi hardware supports 802.11s mesh, see the adapter list
+under <a href="#supported-wi-fi-adapters">Supported Wi-Fi Adapters</a>.</p>
 </div>
 <h3 id="80211s-vs-easymesh">802.11s vs EasyMesh<a class="headerlink" href="#80211s-vs-easymesh" title="Permanent link">¶</a></h3>
 <table>
@@ -3916,22 +4331,22 @@ modes".</p>
 <td>Common</td>
 </tr>
 <tr>
-<td><strong>Linux support</strong></td>
-<td>Kernel-native (mac80211)</td>
-<td>Requires proprietary firmware</td>
+<td><strong>Vendor software</strong></td>
+<td>None needed</td>
+<td>Required</td>
 </tr>
 </tbody>
 </table>
-<p>Infix uses 802.11s because it runs entirely in the kernel with no
-proprietary components.</p>
+<p>Infix uses 802.11s because it is an open standard that works across
+vendors without proprietary components.</p>
 <h3 id="mesh-configuration">Mesh configuration<a class="headerlink" href="#mesh-configuration" title="Permanent link">¶</a></h3>
-<p>A mesh point requires the radio to have <code>band</code>, <code>channel</code>, and a valid
-<code>country-code</code> configured. Mesh and AP modes cannot coexist on the same
-radio.</p>
+<p>A mesh point requires the radio to have <code>band</code> and <code>channel</code> configured,
+and the system a country code.  Mesh and AP modes cannot coexist on the
+same radio.</p>
 <p><strong>Step 1: Configure the radio</strong></p>
 <pre class="cli"><code>admin@example:/&gt; <b>configure</b>
+admin@example:/config/&gt; <b>set hardware wifi country-code DE</b>
 admin@example:/config/&gt; <b>edit hardware component radio1 wifi-radio</b>
-admin@example:/config/hardware/component/radio1/wifi-radio/&gt; <b>set country-code DE</b>
 admin@example:/config/hardware/component/radio1/wifi-radio/&gt; <b>set band 5GHz</b>
 admin@example:/config/hardware/component/radio1/wifi-radio/&gt; <b>set channel 36</b>
 admin@example:/config/hardware/component/radio1/wifi-radio/&gt; <b>leave</b>
@@ -3943,7 +4358,7 @@ network must share the same passphrase:</p>
 <pre class="cli"><code>admin@example:/&gt; <b>configure</b>
 admin@example:/config/&gt; <b>edit keystore symmetric-key mesh-secret</b>
 admin@example:/config/keystore/…/mesh-secret/&gt; <b>set key-format passphrase-key-format</b>
-admin@example:/config/keystore/…/mesh-secret/&gt; <b>change cleartext-symmetric-key</b>
+admin@example:/config/keystore/…/mesh-secret/&gt; <b>edit cleartext-symmetric-key</b>
 Passphrase: ************
 Retype passphrase: ************
 admin@example:/config/keystore/…/mesh-secret/&gt; <b>end</b>
@@ -3980,21 +4395,122 @@ points.  Each node has a mesh interface for backhaul on one radio and
 AP interfaces for clients on another:</p>
 <p><a class="glightbox" data-type="image" data-width="100%" data-height="auto" href="../img/wifi-mesh-roaming.svg" data-desc-position="bottom"><img alt="802.11s mesh backhaul with roaming-enabled access points" src="../img/wifi-mesh-roaming.svg"></a></p>
 <p>With 802.11r/k/v roaming enabled on the APs (same SSID, same
-passphrase, same mobility domain), clients hand off between nodes while
-the mesh carries backhaul traffic.</p>
+passphrase, same mobility domain), clients hand
+off between nodes while the mesh carries backhaul traffic.</p>
+<h2 id="wds-backhaul-and-repeaters">WDS Backhaul and Repeaters<a class="headerlink" href="#wds-backhaul-and-repeaters" title="Permanent link">¶</a></h2>
+<p>A Wi-Fi station normally carries only its own traffic and cannot be a
+bridge port.  In 4-address mode, also called WDS, it can forward traffic
+for the devices behind it.  That is what makes a device with a station
+and an access point a repeater, and a device with a station and wired
+ports a wireless bridge.</p>
+<p>Both ends take part.  The satellite enables <code>wds</code> on its station.  The
+root accepts the station on one of its access points and gives it a
+<code>wds-link</code> interface: a bridge port, one per satellite, created by
+configuration and tied to the satellite's MAC address.</p>
+<p>Compared to an <a href="#80211s-mesh-point-mode">802.11s mesh</a>, a WDS backhaul
+is a star with one root, without multi-hop or self-healing.  In return
+it is a plain access point and station link.</p>
+<h3 id="root-access-point-with-wds-ports">Root: access point with WDS ports<a class="headerlink" href="#root-access-point-with-wds-ports" title="Permanent link">¶</a></h3>
+<p>On the root, two kinds of interface share the job.  The access point is
+the one the satellites connect to: it advertises the backhaul SSID and
+handles authentication, and there is one per radio.  Each <code>wds-link</code>
+is the port for one satellite: that is where its traffic appears and
+what you put in the bridge.  With two satellites on <code>radio1</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>radio1
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a> ├── backhaul    access point, the SSID the satellites connect to
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a> ├── wds-garage  port for the garage satellite, bridge port
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a> └── wds-attic   port for the attic satellite, bridge port
+</code></pre></div>
+<p>A 4-address station forwards traffic for the devices behind it, so it
+cannot share the access point's interface with the ordinary clients.
+The <code>wds-link</code> is that separate port.  Any access point can take WDS
+stations, even one that serves clients, but give the backhaul its own
+SSID, advertised by the root only, so the satellites can land nowhere
+else.  For each satellite, add a <code>wds-link</code> interface naming the access
+point and the satellite's station MAC address, and make it a port of
+the bridge.  The interface uses the access point's radio and MAC
+address, so it takes neither a <code>radio</code> nor a <code>custom-phys-address</code>.</p>
+<pre class="cli"><code>admin@root:/config/&gt; <b>edit interface backhaul</b>
+admin@root:/config/interface/backhaul/&gt; <b>set wifi radio radio1</b>
+admin@root:/config/interface/backhaul/&gt; <b>set wifi access-point ssid my-backhaul</b>
+admin@root:/config/interface/backhaul/&gt; <b>set wifi access-point security secret backhaul-key</b>
+admin@root:/config/interface/backhaul/&gt; <b>end</b>
+admin@root:/config/&gt; <b>edit interface wds-garage</b>
+admin@root:/config/interface/wds-garage/&gt; <b>set type wifi</b>
+admin@root:/config/interface/wds-garage/&gt; <b>set wifi wds-link access-point backhaul</b>
+admin@root:/config/interface/wds-garage/&gt; <b>set wifi wds-link peer-address 02:13:37:13:37:12</b>
+admin@root:/config/interface/wds-garage/&gt; <b>set bridge-port bridge br0</b>
+admin@root:/config/interface/wds-garage/&gt; <b>leave</b>
+</code></pre>
+
+<p>VLANs and other bridge port settings are configured on the <code>wds-link</code>
+interface like on any other port.  The port is down until the satellite
+connects, and goes down again when it leaves, or within about half a
+minute if the satellite disappears without notice:</p>
+<pre class="cli"><code>admin@root:/&gt; <b>show interface wds-garage</b>
+name               : wds-garage
+type               : wifi
+operational status : up
+higher-layer-if    : br0
+mode               : wds-link
+connected          : yes
+signal             : -48 dBm (good)
+</code></pre>
+
+<h3 id="satellite-4-address-station">Satellite: 4-address station<a class="headerlink" href="#satellite-4-address-station" title="Permanent link">¶</a></h3>
+<p>On the satellite, configure a station for the backhaul SSID with <code>wds</code>
+enabled and make it a bridge port, next to the wired ports and any local
+access points.  <code>peer-bssid</code> is optional and pins the station to the
+root's access point:</p>
+<pre class="cli"><code>admin@garage:/config/&gt; <b>edit interface uplink</b>
+admin@garage:/config/interface/uplink/&gt; <b>set wifi radio radio1</b>
+admin@garage:/config/interface/uplink/&gt; <b>set wifi station ssid my-backhaul</b>
+admin@garage:/config/interface/uplink/&gt; <b>set wifi station wds true</b>
+admin@garage:/config/interface/uplink/&gt; <b>set wifi station peer-bssid 02:13:37:13:37:01</b>
+admin@garage:/config/interface/uplink/&gt; <b>set wifi station security secret backhaul-key</b>
+admin@garage:/config/interface/uplink/&gt; <b>set bridge-port bridge br0</b>
+admin@garage:/config/interface/uplink/&gt; <b>leave</b>
+</code></pre>
+
+<p>A station without <code>wds</code> cannot be a bridge port.  The configuration is
+accepted, but the port is refused when it is applied and never comes
+up.</p>
+<p>The access point at the other end must accept 4-address stations.  A
+root with a <code>wds-link</code> for the satellite does, and so do most access
+points with a WDS or 4-address option.  One that does not still lets
+the station connect and authenticate, then drops all its traffic.
+Behind such an access point, use a plain station with an address of its
+own and route or masquerade the network behind it instead, see
+<a href="../firewall/">Firewall</a>.</p>
+<h3 id="repeater">Repeater<a class="headerlink" href="#repeater" title="Permanent link">¶</a></h3>
+<p>A repeater is a satellite that also runs an access point for clients,
+bridged with the backhaul station.  The station and the access point
+can share a radio, but then all radios in the backhaul must use the same
+channel: the station follows the root's channel and the local access
+point has a fixed one.  A channel change on the root, for example from
+radar detection, leaves the satellites disconnected until they are
+reconfigured.</p>
+<p>Clients on a repeater keep their own MAC addresses, so DHCP reservations
+and per-port VLANs work as on a wired network.  With the same client
+SSID on the root and the repeaters, the <a href="#fast-roaming-between-access-points">roaming
+features</a> apply as usual.  Keep the
+backhaul SSID separate from the client SSIDs, or a satellite may connect
+to another satellite instead of the root.</p>
+<p>A satellite with both a WDS backhaul and a cable to the same LAN forms a
+loop, as with any two bridge ports to the same network.</p>
 <h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">¶</a></h2>
 <p>Use <code>show interface wifi0</code> to verify signal strength and connection status.
 If issues arise, try the following troubleshooting steps:</p>
 <ol>
-<li><strong>Verify signal strength</strong>: Check that the target network shows
-   "good" or "excellent" signal in scan results</li>
+<li><strong>Verify signal strength</strong>: Check the target network's signal with
+   <code>show hardware radio0 scan</code>, -65 dBm or better is good</li>
 <li><strong>Check credentials</strong>: Use <code>show keystore symmetric &lt;name&gt;</code> to verify
    the passphrase matches the network password</li>
 <li><strong>Review logs</strong>: Check system logs with <code>show log</code> for Wi-Fi related
    errors</li>
-<li><strong>Regulatory compliance</strong>: Ensure the country-code on the radio
-   matches your location</li>
-<li><strong>Hardware detection</strong>: Confirm the WiFi radio appears in <code>show
+<li><strong>Regulatory compliance</strong>: Ensure the Wi-Fi country code matches your
+   location</li>
+<li><strong>Hardware detection</strong>: Confirm the Wi-Fi radio appears in <code>show
    hardware</code></li>
 </ol>
 <p>If issues persist, check the system log for specific error messages that
@@ -4049,10 +4565,12 @@ can help identify the root cause.</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["toc.follow", "navigation.path", "navigation.instant", "navigation.instant.progress", "navigation.tracking", "navigation.indexes", "search.highlight", "search.share", "content.code.copy", "content.code.annotate", "content.footnote.tooltips"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["toc.follow", "navigation.path", "navigation.instant", "navigation.instant.progress", "navigation.tracking", "navigation.indexes", "search.highlight", "search.share", "content.code.copy", "content.code.annotate", "content.footnote.tooltips"], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+        <script src="../print-keep.js"></script>
       
     
   
